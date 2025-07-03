@@ -61,7 +61,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.cse.buet.messagingapplication/com.cse.buet.messagingapplication.HelloApplication
+                                com.cse.buet.messagingapplication/com.messagingapplication.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

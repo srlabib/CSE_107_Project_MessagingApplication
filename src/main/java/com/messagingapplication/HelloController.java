@@ -1,4 +1,4 @@
-package com.cse.buet.messagingapplication;
+package com.messagingapplication;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
