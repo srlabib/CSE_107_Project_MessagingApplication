@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="mainPane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.MainUIController">
+
+    <!-- Left: Contact List -->
+    <left>
+        <VBox fx:id="contactPane" spacing="10" styleClass="contact-pane">
+            <Label styleClass="section-title" text="Chats" />
+            <ListView fx:id="contactList" styleClass="contact-list" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </left>
+
+    <!-- Center: Chat Area -->
+    <center>
+        <VBox fx:id="chatPane" spacing="5" styleClass="chat-pane">
+            <!-- Contact Name -->
+            <Label fx:id="chatHeader" styleClass="chat-header" text="Select a contact" />
+
+            <!-- Message View -->
+            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" styleClass="message-scroll" VBox.vgrow="ALWAYS">
+                <VBox fx:id="messageContainer" spacing="10" styleClass="message-container"  />
+            </ScrollPane>
+
+
+            <!-- Message Input -->
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="input-box">
+                <TextField fx:id="messageInput" promptText="Type a message..." styleClass="message-input" HBox.hgrow="ALWAYS" />
+                <Button fx:id="sendButton" onAction="#send" styleClass="send-button" text="Send" />
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

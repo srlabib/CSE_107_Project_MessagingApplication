@@ -15,9 +15,12 @@ import java.io.IOException;
 public class LoginController {
     @FXML
     TextField usernameField;
-    public void login(ActionEvent e){
-        String name = usernameField.getText();
-        System.out.println("Hello " + name);
+    public void login(ActionEvent e) throws IOException {
+//        String name = usernameField.getText();
+//        System.out.println("Hello " + name);
+        Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        stage.setScene(LoadPage.loadFXML("MainUI.fxml"));
+        stage.show();
     }
 
 
@@ -28,6 +31,7 @@ public class LoginController {
         stage.show();
 
     }
+
 
 
 }
