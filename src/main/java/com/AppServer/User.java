@@ -1,0 +1,55 @@
+package com.AppServer;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
+
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private final String username;
+    private String password;
+    private final String name;
+    private HashSet<String>chatThreads;     // all id of chat Thread
+
+    public User(String username, String password,String name ,String email) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    void verifyPassword(String password) {
+        if (!this.password.equals(password)) {
+            throw new IllegalArgumentException("Password does not match");
+        }
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
+    public String getName(){
+        return  name;
+    }
+
+    /*
+    idea:
+    * when user send a message to server it will contain a chat thread id.
+    * what if the user want to send message to a new person?
+    * in that case the client will send a request with the person username to create a new chat thread
+
+    * when the server is connected to the client
+    * A client thread will be created
+    * it will send all data to the client at first
+    * there will be three subclass to the client each will be runnable
+    * message sender, message receiver , update pusher
+    * whenever there is a new update the waiting update pusher will be notified
+    * and send all updates to the client from pending updates list
+
+     */
+
+}

@@ -3,9 +3,6 @@ package com.messagingapplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -27,36 +24,6 @@ public class MainUIController {
         return text.getLayoutBounds().getHeight() + 20; // Add label padding
     }
 
-//    private double estimateLabelHeight(String text, double maxWidth, Font font) {
-//        Text helperText = new Text();
-//        helperText.setFont(font);
-//
-//        double lineHeight = helperText.getLayoutBounds().getHeight();
-//        double estimatedHeight = lineHeight; // At least one line
-//
-//        String[] words = text.split(" ");
-//        double currentLineWidth = 0;
-//
-//        for (String word : words) {
-//            helperText.setText(word);
-//            double wordWidth = helperText.getLayoutBounds().getWidth();
-//
-//            if (currentLineWidth + wordWidth > maxWidth) {
-//                // Move to next line
-//                estimatedHeight += lineHeight;
-//                currentLineWidth = wordWidth;
-//            } else {
-//                currentLineWidth += wordWidth;
-//            }
-//
-//            // Add space width (approximate)
-//            helperText.setText(" ");
-//            currentLineWidth += helperText.getLayoutBounds().getWidth();
-//        }
-//
-//        // Add padding (e.g., 10px top + 10px bottom)
-//        return estimatedHeight + 20;
-//    }
     public void send(ActionEvent event){
         System.out.println("called");
         String message = messageInput.getText();
