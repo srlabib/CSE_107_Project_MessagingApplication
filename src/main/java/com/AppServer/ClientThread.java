@@ -8,11 +8,13 @@ public class ClientThread implements Runnable{
     Socket socket;
     ObjectOutputStream oos;
     ObjectInputStream ois;
+    private DataHandler dataHandler;
 
     ClientThread(Socket socket) throws IOException {
         this.socket = socket;
         oos = new ObjectOutputStream(socket.getOutputStream());
         ois = new ObjectInputStream(socket.getInputStream());
+        dataHandler = DataHandler.getInstance();
         new Thread(this).start();
     }
     public void run(){
@@ -20,7 +22,9 @@ public class ClientThread implements Runnable{
         try{
             // authentication logic
             AuthenticationData data = (AuthenticationData)ois.readObject();
+            if(data.newAccount){
 
+            }
 
         }catch(Exception e){
             // Handle authentication failure
