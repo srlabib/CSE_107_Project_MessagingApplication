@@ -8,6 +8,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DataHandler {
     private Map<String, User> users = new ConcurrentHashMap<String, User>();
+
+
+
     private static DataHandler INSTANCE;
     private <T>
     T loadData(String filename, Class<? extends T> classtype) {
@@ -34,7 +37,6 @@ public class DataHandler {
         // Private constructor to prevent instantiation
 
         // Load users from the file
-
         users = loadData("Assets/Userdata/users.bin",ConcurrentHashMap.class);
 
     }
