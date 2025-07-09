@@ -38,6 +38,9 @@ public class DataHandler {
 
         users = loadData("Assets/Userdata/users.bin",ConcurrentHashMap.class);
 
+    }
 
+    User seachUser(String username) {
+        return users.get(username);
     }
 }

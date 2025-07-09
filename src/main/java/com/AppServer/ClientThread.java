@@ -21,14 +21,17 @@ public class ClientThread implements Runnable{
             // authentication logic
             AuthenticationData data = (AuthenticationData)ois.readObject();
 
+
         }catch(Exception e){
             // Handle authentication failure
             // send error message to client
             // close Thread
+
         }
 
 
         // If authentication is successful, start the message sender, receiver, and update pusher threads
+
     }
 
 
