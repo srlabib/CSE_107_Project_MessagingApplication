@@ -18,13 +18,10 @@ public class MainServer {
 
 
         while(true){
-            Socket  socket = serverSocket.accept();
+            Socket socket = serverSocket.accept();
 
-
+            new ClientThread(socket);
         }
-
-
-
 
 
     }

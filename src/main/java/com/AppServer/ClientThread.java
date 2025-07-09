@@ -8,15 +8,19 @@ public class ClientThread implements Runnable{
     Socket socket;
     ObjectOutputStream oos;
     ObjectInputStream ois;
+
     ClientThread(Socket socket) throws IOException {
         this.socket = socket;
         oos = new ObjectOutputStream(socket.getOutputStream());
         ois = new ObjectInputStream(socket.getInputStream());
+        new Thread(this).start();
     }
     public void run(){
 
         try{
             // authentication logic
+            AuthenticationData data = (AuthenticationData)ois.readObject();
+
         }catch(Exception e){
             // Handle authentication failure
             // send error message to client
