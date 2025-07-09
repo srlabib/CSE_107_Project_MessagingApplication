@@ -3,13 +3,12 @@ package com.AppServer;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DataHandler {
     private Map<String, User> users = new ConcurrentHashMap<String, User>();
-
+    private static DataHandler INSTANCE;
     private <T>
     T loadData(String filename, Class<? extends T> classtype) {
        File file = new File(filename);
@@ -40,4 +39,13 @@ public class DataHandler {
 
 
     }
+
+   public static DataHandler getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new DataHandler();
+        }
+        return INSTANCE;
+   }
+
+
 }
