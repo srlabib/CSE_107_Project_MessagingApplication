@@ -13,7 +13,7 @@ public class User implements Serializable {
     private final String name;
     private HashSet<String>chatThreads;     // all id of chat Thread
 
-    public User(String username, String password,String name ,String email) {
+    public User(String username, String password,String name) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -23,7 +23,8 @@ public class User implements Serializable {
         return username;
     }
 
-    void verifyPassword(String password) {
+    public void verifyPassword(String password) {
+        System.out.println(password+" "+this.password);
         if (!this.password.equals(password)) {
             throw new IllegalArgumentException("Password does not match");
         }

@@ -43,7 +43,7 @@
                 </font>
             </PasswordField>
 
-            <Button prefHeight="40" prefWidth="160" style="-fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);                            -fx-background-radius: 20;                            -fx-text-fill: white;                            -fx-font-size: 14;" text="Create Account">
+            <Button onAction="#CreateAccount" prefHeight="40" prefWidth="160" style="-fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);                            -fx-background-radius: 20;                            -fx-text-fill: white;                            -fx-font-size: 14;" text="Create Account">
             </Button>
 
             <Hyperlink onAction="#moveToLogin" style="-fx-text-fill: #0072ff; -fx-font-size: 13;" text="← Back to Login">
