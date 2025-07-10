@@ -14,7 +14,7 @@ public class ChatThread implements Serializable {
     private LocalDateTime lastUpdated; // timestamp of the last update in the chat thread
     private ArrayList<Message> messageList = new ArrayList<>();// array of messages in the chat thread
 
-    public ChatThread(String id, String name, String[] participants) {
+    public ChatThread(String id, String[] participants) {
         this.id = id;
         this.participants = participants;
     }
@@ -34,11 +34,16 @@ public class ChatThread implements Serializable {
     }
 
 
+
     public String getId() {
         return id;
     }
 
     public String[] getParticipants() {
         return participants;
+    }
+
+    public ArrayList<Message> getMessageList() {
+        return messageList;
     }
 }

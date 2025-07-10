@@ -1,6 +1,7 @@
 package com.AppServer;
 
 import com.CommonClasses.AuthenticationData;
+import com.CommonClasses.User;
 
 import java.io.*;
 import java.net.Socket;
@@ -11,13 +12,13 @@ public class ClientThread implements Runnable{
     Socket socket;
     ObjectOutputStream oos;
     ObjectInputStream ois;
-    private DataHandler dataHandler;
+    private ServerDataHandler dataHandler;
 
     ClientThread(Socket socket) throws IOException {
         this.socket = socket;
         oos = new ObjectOutputStream(socket.getOutputStream());
         ois = new ObjectInputStream(socket.getInputStream());
-        dataHandler = DataHandler.getInstance();
+        dataHandler = ServerDataHandler.getInstance();
         new Thread(this).start();
         System.out.println("End of ClientThread constructor, waiting for authentication...");
     }

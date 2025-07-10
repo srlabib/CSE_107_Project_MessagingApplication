@@ -1,6 +1,8 @@
 package com.messagingapplication;
 
 import com.CommonClasses.AuthenticationData;
+import com.CommonClasses.ChatThread;
+import com.CommonClasses.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +17,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class LoginController {
@@ -25,6 +29,8 @@ public class LoginController {
     public void login(ActionEvent e) throws IOException, ClassNotFoundException {
         String name = usernameField.getText();
         String password = passwordField.getText();
+        ObjectOutputStream oos;
+        ObjectInputStream ois;
 
         if(name.isEmpty() || password.isEmpty()){
             System.out.println("Please fill all fields");
@@ -35,8 +41,8 @@ public class LoginController {
         try {
             socket = new Socket("localhost", 2222);
             AuthenticationData data = new AuthenticationData(name, password);
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
 
             oos.writeObject(data);
             oos.flush();
@@ -53,11 +59,29 @@ public class LoginController {
             throw new RuntimeException(ex);
         }
 
+        // first I need to get all the required data from the server
+        // and load the clientDataHandler with that data
+        // after that I can load the main UI
+        // the main UI will load its Vbox with the data from the clientDataHandler
+
+        User currentUser = (User) ois.readObject();
+        Map<String, ChatThread> chatThreads = (ConcurrentHashMap<String, ChatThread>) ois.readObject();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainUI.fxml"));
+        Parent root = loader.load();
+
+        MainUIController mainUIController = loader.getController();
+        mainUIController.oos = oos;
+
+        // Updating required data in ClientDataHandler from the server
+        ClientDataHandler.getInstance().setCurrentUser(currentUser);
+        ClientDataHandler.getInstance().scrollPane = mainUIController.getScrollPane();
+        ClientDataHandler.getInstance().loadData(chatThreads);
 
 
-//        Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-//        stage.setScene(LoadPage.loadFXML("MainUI.fxml"));
-//        stage.show();
+        Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
 

@@ -2,16 +2,18 @@ package com.AppServer;
 
 
 import com.CommonClasses.ChatThread;
+import com.CommonClasses.User;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DataHandler {
+public class ServerDataHandler {
     private Map<String, User> users = new ConcurrentHashMap<String, User>();
     private Map<String, ChatThread> charThreads = new ConcurrentHashMap<String, ChatThread>();
-    private static DataHandler INSTANCE;
+
+    private static ServerDataHandler INSTANCE;
     private final String usersFilePath = "Assets/Userdata/users.bin";
     private final String chatThreadsFilePath = "Assets/Userdata/chatThreads.bin";
     private <T>
@@ -35,7 +37,7 @@ public class DataHandler {
            return null;
        }
    }
-    private DataHandler() {
+    private ServerDataHandler() {
         // Private constructor to prevent instantiation
         // Load users from the file
         users = loadData(usersFilePath,ConcurrentHashMap.class);
@@ -60,7 +62,7 @@ public class DataHandler {
     }
 
     ChatThread createChatThread(String id, String name, String[] participants) {
-        ChatThread chatThread = new ChatThread(id, name, participants);
+        ChatThread chatThread = new ChatThread(id, participants);
         charThreads.put(id, chatThread);
         return chatThread;
     }
@@ -81,9 +83,9 @@ public class DataHandler {
         }
     }
 
-    public static DataHandler getInstance() {
+    public static ServerDataHandler getInstance() {
         if(INSTANCE == null) {
-            INSTANCE = new DataHandler();
+            INSTANCE = new ServerDataHandler();
         }
         return INSTANCE;
     }

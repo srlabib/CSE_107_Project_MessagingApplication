@@ -37,6 +37,7 @@
 .message-container {
     -fx-padding: 5;
     -fx-background-color: transparent;
+    -fx-spacing: 10;
 }
 
 .message-bubble {

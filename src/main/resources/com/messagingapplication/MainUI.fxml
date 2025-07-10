@@ -27,7 +27,7 @@
 
             <!-- Message View -->
             <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" styleClass="message-scroll" VBox.vgrow="ALWAYS">
-                <VBox fx:id="messageContainer" spacing="10" styleClass="message-container"  />
+<!--                <VBox fx:id="messageContainer" spacing="10" styleClass="message-container"  />-->
             </ScrollPane>
 
 

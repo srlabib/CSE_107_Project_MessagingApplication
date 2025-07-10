@@ -1,8 +1,7 @@
-package com.AppServer;
+package com.CommonClasses;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class User implements Serializable {
