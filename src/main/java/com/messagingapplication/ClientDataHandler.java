@@ -1,8 +1,8 @@
 package com.messagingapplication;
 
-import com.CommonClasses.ChatThread;
-import com.CommonClasses.Message;
-import com.CommonClasses.User;
+import com.SharedClasses.ChatThread;
+import com.SharedClasses.Message;
+import com.SharedClasses.User;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -33,6 +33,11 @@ public class ClientDataHandler {
         return INSTANCE;
     }
 
+
+    public VBox getChatThreadView(String chatThreadId) {
+        // Returns the VBox for the specified chat thread ID
+        return chatThreadViews.get(chatThreadId);
+    }
     public void setCurrentUser(User user) {
         this.currentUser = user;
     }
@@ -43,7 +48,7 @@ public class ClientDataHandler {
 
         for(var entry : charThreads.entrySet()) {
             VBox chatThreadView = new VBox();
-            chatThreadView.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+            chatThreadView.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             var chatMessages = entry.getValue().getMessageList();
 
             for(Message message:chatMessages){
@@ -62,6 +67,13 @@ public class ClientDataHandler {
 
     }
 
+    public String getCurrentUsername() {
+        if (currentUser == null) {
+            throw new IllegalStateException("Current user is not set.");
+        }
+        return currentUser.getUsername();
+    }
+
     public void clearData() {
         // Clear the chat threads data
         charThreads.clear();
@@ -70,7 +82,7 @@ public class ClientDataHandler {
 
     public void addNewMessage(Message message){
         // Generate the chat thread ID based on the current user and the message sender
-        String chatThreadId = ChatThread.generateID(currentUser.getUsername(), message.getSender());
+        String chatThreadId = message.getThreadID();
         // Search for the chat thread in the existing threads
         ChatThread chatThread = charThreads.get(chatThreadId);
 
@@ -97,7 +109,7 @@ public class ClientDataHandler {
     }
 
     private void addMessageToVbox(Message message, VBox messageContainer) {
-        boolean isSentByUser = message.getSender().equals(currentUser.getName());
+        boolean isSentByUser = message.getSender().equals(currentUser.getUsername());
         // Create message label
         Label messageLabel = new Label(message.getContent());
         messageLabel.setWrapText(true);

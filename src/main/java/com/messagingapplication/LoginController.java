@@ -1,8 +1,9 @@
 package com.messagingapplication;
 
-import com.CommonClasses.AuthenticationData;
-import com.CommonClasses.ChatThread;
-import com.CommonClasses.User;
+import com.SharedClasses.AuthenticationData;
+import com.SharedClasses.ChatThread;
+import com.SharedClasses.Message;
+import com.SharedClasses.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Map;
@@ -27,6 +27,7 @@ public class LoginController {
     @FXML
     TextField passwordField;
     public void login(ActionEvent e) throws IOException, ClassNotFoundException {
+
         String name = usernameField.getText();
         String password = passwordField.getText();
         ObjectOutputStream oos;
@@ -72,12 +73,14 @@ public class LoginController {
 
         MainUIController mainUIController = loader.getController();
         mainUIController.oos = oos;
+        mainUIController.chatThreads = chatThreads;
 
         // Updating required data in ClientDataHandler from the server
         ClientDataHandler.getInstance().setCurrentUser(currentUser);
         ClientDataHandler.getInstance().scrollPane = mainUIController.getScrollPane();
         ClientDataHandler.getInstance().loadData(chatThreads);
 
+        new MessageReciever(ois);
 
         Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -92,6 +95,44 @@ public class LoginController {
         stage.show();
 
     }
+
+
+    public void loadDummyDataAndShowMainUI(ActionEvent e) throws IOException {
+        // Dummy user
+        User currentUser = new User("testuser","pass" ,"Test User");
+
+        // Dummy chat threads
+        Map<String, ChatThread> chatThreads = new java.util.concurrent.ConcurrentHashMap<>();
+
+        // ChatThread 1
+        ChatThread thread1 = new ChatThread("thread1", new String[]{"testuser", "alice"});
+        thread1.pushMessage(new Message("alice", "thread1", "Hello!", java.time.LocalDateTime.now().minusMinutes(10)));
+        thread1.pushMessage(new Message("testuser", "thread1", "Hi Alice!", java.time.LocalDateTime.now().minusMinutes(9)));
+        chatThreads.put(thread1.getId(), thread1);
+
+        // ChatThread 2
+        ChatThread thread2 = new ChatThread("thread2", new String[]{"testuser", "bob"});
+        thread2.pushMessage(new Message("bob", "thread2", "Hey, are you there?", java.time.LocalDateTime.now().minusMinutes(5)));
+        chatThreads.put(thread2.getId(), thread2);
+
+        // Load Main UI
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainUI.fxml"));
+        Parent root = loader.load();
+        MainUIController mainUIController = loader.getController();
+        mainUIController.chatThreads = chatThreads;
+
+        // Update ClientDataHandler
+        ClientDataHandler.getInstance().setCurrentUser(currentUser);
+        ClientDataHandler.getInstance().scrollPane = mainUIController.getScrollPane();
+        ClientDataHandler.getInstance().loadData(chatThreads);
+        mainUIController.loadUIData(); // Initialize UI with chat threads
+        mainUIController.clientDataHandler = ClientDataHandler.getInstance();
+
+        Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
 
 
 

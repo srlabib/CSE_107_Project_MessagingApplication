@@ -1,4 +1,4 @@
-package com.CommonClasses;
+package com.SharedClasses;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

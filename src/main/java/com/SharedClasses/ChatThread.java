@@ -1,4 +1,4 @@
-package com.CommonClasses;
+package com.SharedClasses;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,6 +14,10 @@ public class ChatThread implements Serializable {
     private LocalDateTime lastUpdated; // timestamp of the last update in the chat thread
     private ArrayList<Message> messageList = new ArrayList<>();// array of messages in the chat thread
 
+    public String getRemoteUserName(String localUser){
+        if(participants[0].equals(localUser)) return participants[1];
+        return participants[2];
+    }
     public ChatThread(String id, String[] participants) {
         this.id = id;
         this.participants = participants;
@@ -31,6 +35,10 @@ public class ChatThread implements Serializable {
     public void pushMessage(Message message){
         messageList.add(message);
         lastUpdated = LocalDateTime.now(); // Update the last updated timestamp
+    }
+
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
     }
 
 

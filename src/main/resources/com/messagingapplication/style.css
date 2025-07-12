@@ -75,3 +75,68 @@
     -fx-padding: 8 14;
 }
 
+
+.contact-cell {
+    -fx-padding: 8;
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: center-left;
+}
+
+.contact-cell:hover {
+    -fx-background-color: #f9f9f9;
+}
+
+.profile-image {
+    -fx-background-radius: 100;
+    -fx-border-radius: 100;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+}
+
+.name-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #222;
+}
+
+.subtext-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666;
+}
+
+.status-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.status-label.online {
+    -fx-text-fill: #4CAF50;
+}
+
+.status-label.offline {
+    -fx-text-fill: #B0BEC5;
+}
+
+
+
+.user-search-field  {
+
+    -fx-background-radius: 20;
+    -fx-padding: 5 10;
+    -fx-border-color: #CCC;
+    -fx-border-radius: 20;
+    -fx-background-color: transparent;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-prompt-text-fill: #999;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Text field styling */
+.search-box {
+    -fx-padding: 10 10;
+}
+
+

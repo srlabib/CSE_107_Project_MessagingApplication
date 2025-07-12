@@ -1,4 +1,4 @@
-package com.CommonClasses;
+package com.SharedClasses;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.messagingapplication;
 
-import com.CommonClasses.AuthenticationData;
+import com.SharedClasses.AuthenticationData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

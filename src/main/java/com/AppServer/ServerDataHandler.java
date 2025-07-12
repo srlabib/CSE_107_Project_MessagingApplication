@@ -1,8 +1,10 @@
 package com.AppServer;
 
 
-import com.CommonClasses.ChatThread;
-import com.CommonClasses.User;
+import com.SharedClasses.ChatThread;
+import com.SharedClasses.Message;
+import com.SharedClasses.User;
+import javafx.scene.layout.VBox;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -12,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ServerDataHandler {
     private Map<String, User> users = new ConcurrentHashMap<String, User>();
     private Map<String, ChatThread> charThreads = new ConcurrentHashMap<String, ChatThread>();
+    private Map<String,ClientThread> activeUsers = new ConcurrentHashMap<>();
 
     private static ServerDataHandler INSTANCE;
     private final String usersFilePath = "Assets/Userdata/users.bin";
@@ -57,9 +60,9 @@ public class ServerDataHandler {
         return user;
     }
 
-    ChatThread searchChatThread(String id) {
-        return charThreads.get(id);
-    }
+//    ChatThread searchChatThread(String id) {
+//        return charThreads.get(id);
+//    }
 
     ChatThread createChatThread(String id, String name, String[] participants) {
         ChatThread chatThread = new ChatThread(id, participants);
@@ -88,5 +91,55 @@ public class ServerDataHandler {
             INSTANCE = new ServerDataHandler();
         }
         return INSTANCE;
+    }
+
+    public synchronized void addNewMessage(Message message, String username){
+        // Generate the chat thread ID based on the current user and the message sender
+        String chatThreadId = message.getThreadID();
+        // Search for the chat thread in the existing threads
+        ChatThread chatThread = charThreads.get(chatThreadId);
+
+        if (chatThread == null) {
+            // If the chat thread does not exist, create a new one
+            chatThread = new ChatThread(chatThreadId, new String[]{username,message.getSender()});
+            charThreads.put(chatThreadId, chatThread);
+            chatThread.pushMessage(message);
+            for(String participant : chatThread.getParticipants()) {
+                ClientThread clientThread = activeUsers.get(participant);
+                if (clientThread != null) {
+                    clientThread.sendNewChatThread(chatThread);
+                }
+            }
+        }
+        else{
+            chatThread.pushMessage(message);
+            for(String participant : chatThread.getParticipants()) {
+                ClientThread clientThread = activeUsers.get(participant);
+                if (clientThread != null) {
+                    clientThread.sendMessage(message);
+                }
+            }
+        }
+        // Push the message to the chat thread
+
+
+        // Send the message to all active participants
+        for(String participant : chatThread.getParticipants()) {
+            ClientThread clientThread = activeUsers.get(participant);
+            if (clientThread != null) {
+                clientThread.sendMessage(message);
+            }
+        }
+    }
+
+    public void addActiveUser(String username, ClientThread clientThread) {
+        activeUsers.put(username, clientThread);
+    }
+
+    public void removeActiveUser(String username) {
+        if (username == null || !activeUsers.containsKey(username)) {
+            throw new IllegalArgumentException("User not found or username is null");
+        }
+        activeUsers.remove(username);
     }
 }

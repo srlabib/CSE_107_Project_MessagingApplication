@@ -1,7 +1,10 @@
 package com.AppServer;
 
-import com.CommonClasses.AuthenticationData;
-import com.CommonClasses.User;
+import com.SharedClasses.AuthenticationData;
+import com.SharedClasses.ChatThread;
+import com.SharedClasses.Message;
+import com.SharedClasses.User;
+import com.messagingapplication.ClientDataHandler;
 
 import java.io.*;
 import java.net.Socket;
@@ -13,6 +16,11 @@ public class ClientThread implements Runnable{
     ObjectOutputStream oos;
     ObjectInputStream ois;
     private ServerDataHandler dataHandler;
+    Object newMessage;
+    boolean messagePending;
+    private Thread senderThread;
+    private Thread receiverThread;
+
 
     ClientThread(Socket socket) throws IOException {
         this.socket = socket;
@@ -21,7 +29,10 @@ public class ClientThread implements Runnable{
         dataHandler = ServerDataHandler.getInstance();
         new Thread(this).start();
         System.out.println("End of ClientThread constructor, waiting for authentication...");
+        messagePending = false;
+        newMessage = null;
     }
+
     public void run(){
         System.out.println("New client connected: " + socket.getInetAddress() + ":" + socket.getPort());
         try{
@@ -60,6 +71,7 @@ public class ClientThread implements Runnable{
 
         System.out.println("User: " + user.getUsername() + " has successfully logged in");
 
+        ServerDataHandler.getInstance().addActiveUser(user.getUsername(), this);
 
         try {
             oos.writeObject((String)"successful");
@@ -68,8 +80,9 @@ public class ClientThread implements Runnable{
             throw new RuntimeException();
         }
 
-        Thread senderThread = new Thread(new MessageSender());
-        Thread receiverThread = new Thread(new MessageReceiver());
+
+        senderThread = new Thread(new MessageSender());
+        receiverThread = new Thread(new MessageReceiver());
         Thread updatePusherThread = new Thread(new UpdatePusher());
 
 
@@ -95,8 +108,25 @@ public class ClientThread implements Runnable{
         }
 
         System.err.println("User : "+user.getUsername()+" has disconnected");
+        ServerDataHandler.getInstance().removeActiveUser(user.getUsername());
 
 
+    }
+
+    void sendMessage(Message message) {
+        synchronized (this){
+            newMessage = message;
+            messagePending = true;
+            senderThread.notifyAll();
+        }
+    }
+
+    public void sendNewChatThread(ChatThread chatThread) {
+        synchronized (this){
+            newMessage = chatThread;
+            messagePending = true;
+            senderThread.notifyAll();
+        }
     }
 
 
@@ -104,12 +134,47 @@ public class ClientThread implements Runnable{
         @Override
         public void run() {
             // Logic for sending messages to the client
+            while(true) {
+                try {
+                    synchronized (ClientThread.this) {
+                        while (!messagePending) {
+                            wait();
+                        }
+                        if (newMessage != null) {
+                            oos.writeObject(newMessage);
+                            oos.flush();
+                            messagePending = false;
+                            newMessage = null;
+                        }
+                    }
+                } catch (IOException e) {
+                    System.err.println("Error sending message to client: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+                    break;
+                } catch (InterruptedException e) {
+                    System.err.println("Sender thread interrupted: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+                    break;
+                }
+            }
         }
     }
     class MessageReceiver implements Runnable {
         @Override
         public void run() {
             // Logic for receiving messages from the client
+            try {
+                while (true) {
+                    Object obj = ois.readObject();
+                    if (obj instanceof Message) {
+                        Message message = (Message) obj;
+                        ServerDataHandler.getInstance().addNewMessage(message,user.getUsername());
+
+                    } else {
+                        System.err.println("Received unknown object: " + obj.getClass().getName());
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(user.getUsername()+" disconnected. Message reciver exiting");
+            }
         }
     }
     class UpdatePusher implements Runnable {

@@ -1,9 +1,8 @@
 package com.messagingapplication;
 
-import com.CommonClasses.Message;
+import com.SharedClasses.Message;
 
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class MessageReciever extends Thread{
     ObjectInputStream ois;
@@ -25,7 +24,7 @@ public class MessageReciever extends Thread{
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Server disconnected. Message reciver exiting");
         }
     }
 }
