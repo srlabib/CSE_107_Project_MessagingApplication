@@ -8,15 +8,16 @@ import java.util.ArrayList;
 public class ChatThread implements Serializable {
     @Serial
     private static final long serialVersionUID = 3L;
-
+    private LocalDateTime lastUpdated = LocalDateTime.now(); // timestamp of the last update to the chat thread
     private final String id; // unique identifier for the chat thread
     private final String[] participants; // usernames of participants in the chat thread
-    private LocalDateTime lastUpdated; // timestamp of the last update in the chat thread
     private ArrayList<Message> messageList = new ArrayList<>();// array of messages in the chat thread
+
+
 
     public String getRemoteUserName(String localUser){
         if(participants[0].equals(localUser)) return participants[1];
-        return participants[2];
+        return participants[0];
     }
     public ChatThread(String id, String[] participants) {
         this.id = id;

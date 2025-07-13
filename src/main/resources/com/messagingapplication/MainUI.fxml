@@ -19,7 +19,7 @@
         <VBox fx:id="contactPane" spacing="10" styleClass="contact-pane">
          <HBox prefHeight="0.0" prefWidth="219.0" styleClass="search-box">
             <children>
-               <TextField prefHeight="25.0" prefWidth="242.0" promptText="Search user" styleClass="user-search-field" />
+               <TextField fx:id="searchText" onAction="#search" prefHeight="25.0" prefWidth="242.0" promptText="Search user" styleClass="user-search-field" />
                <AnchorPane prefHeight="33.0" prefWidth="61.0">
                   <children>
                      <ImageView fitHeight="31.0" fitWidth="24.0" layoutX="5.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" styleClass="search-icon">

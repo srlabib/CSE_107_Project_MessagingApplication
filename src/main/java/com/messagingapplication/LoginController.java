@@ -12,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.concurrent.Task;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -78,11 +80,17 @@ public class LoginController {
         // Updating required data in ClientDataHandler from the server
         ClientDataHandler.getInstance().setCurrentUser(currentUser);
         ClientDataHandler.getInstance().scrollPane = mainUIController.getScrollPane();
+        ClientDataHandler.getInstance().uiController = mainUIController;
         ClientDataHandler.getInstance().loadData(chatThreads);
+        mainUIController.loadUIData(); // Initialize UI with chat threads
+        mainUIController.clientDataHandler = ClientDataHandler.getInstance();
+
+
 
         new MessageReciever(ois);
 
         Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        stage.setTitle("Messaging Application - " + currentUser.getUsername());
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -96,7 +104,7 @@ public class LoginController {
 
     }
 
-
+/*
     public void loadDummyDataAndShowMainUI(ActionEvent e) throws IOException {
         // Dummy user
         User currentUser = new User("testuser","pass" ,"Test User");
@@ -106,13 +114,13 @@ public class LoginController {
 
         // ChatThread 1
         ChatThread thread1 = new ChatThread("thread1", new String[]{"testuser", "alice"});
-        thread1.pushMessage(new Message("alice", "thread1", "Hello!", java.time.LocalDateTime.now().minusMinutes(10)));
-        thread1.pushMessage(new Message("testuser", "thread1", "Hi Alice!", java.time.LocalDateTime.now().minusMinutes(9)));
+//        thread1.pushMessage(new Message("alice", "thread1", "Hello!", java.time.LocalDateTime.now().minusMinutes(10)));
+//        thread1.pushMessage(new Message("testuser", "thread1", "Hi Alice!", java.time.LocalDateTime.now().minusMinutes(9)));
         chatThreads.put(thread1.getId(), thread1);
 
         // ChatThread 2
         ChatThread thread2 = new ChatThread("thread2", new String[]{"testuser", "bob"});
-        thread2.pushMessage(new Message("bob", "thread2", "Hey, are you there?", java.time.LocalDateTime.now().minusMinutes(5)));
+//        thread2.pushMessage(new Message("bob", "thread2", "Hey, are you there?", java.time.LocalDateTime.now().minusMinutes(5)));
         chatThreads.put(thread2.getId(), thread2);
 
         // Load Main UI
@@ -132,7 +140,7 @@ public class LoginController {
         stage.setScene(new Scene(root));
         stage.show();
     }
-
+*/
 
 
 

@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        stage.setTitle("Login");
+        stage.setTitle("Messenger Application");
         stage.setScene(LoadPage.loadFXML("loginPage.fxml"));
         stage.show();
     }

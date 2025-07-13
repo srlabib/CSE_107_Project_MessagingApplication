@@ -4,11 +4,13 @@ import com.SharedClasses.AuthenticationData;
 import com.SharedClasses.ChatThread;
 import com.SharedClasses.Message;
 import com.SharedClasses.User;
-import com.messagingapplication.ClientDataHandler;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientThread implements Runnable{
     private User user;
@@ -20,6 +22,8 @@ public class ClientThread implements Runnable{
     boolean messagePending;
     private Thread senderThread;
     private Thread receiverThread;
+    private MessageSender sender;
+
 
 
     ClientThread(Socket socket) throws IOException {
@@ -75,25 +79,33 @@ public class ClientThread implements Runnable{
 
         try {
             oos.writeObject((String)"successful");
+            oos.writeObject(user);
+            Map<String, ChatThread> chatThreads = new ConcurrentHashMap<String, ChatThread>();
+            HashSet<String> chatThreadIds = user.getChatThreads();
+            for(String id : chatThreadIds){
+                chatThreads.put(id, dataHandler.getChatThread(id));
+            }
+
+            oos.writeObject(chatThreads);
+
+
         } catch (IOException e) {
             System.err.println("Error sending success message to client: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             throw new RuntimeException();
         }
 
 
-        senderThread = new Thread(new MessageSender());
+        senderThread = new Thread(sender = new MessageSender());
         receiverThread = new Thread(new MessageReceiver());
-        Thread updatePusherThread = new Thread(new UpdatePusher());
 
 
         senderThread.start();
         receiverThread.start();
-        updatePusherThread.start();
 
         try {
             senderThread.join();
             receiverThread.join();
-            updatePusherThread.join();
+
         } catch (InterruptedException e) {
             System.err.println("Thread interrupted: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
         }
@@ -114,18 +126,19 @@ public class ClientThread implements Runnable{
     }
 
     void sendMessage(Message message) {
-        synchronized (this){
+        synchronized (ClientThread.this){
             newMessage = message;
             messagePending = true;
-            senderThread.notifyAll();
+            ClientThread.this.notifyAll();
         }
     }
 
     public void sendNewChatThread(ChatThread chatThread) {
-        synchronized (this){
+        synchronized (ClientThread.this){
             newMessage = chatThread;
             messagePending = true;
-            senderThread.notifyAll();
+            ClientThread.this.notifyAll();
+            System.out.println("Notifying sender thread to send new chat thread: " + chatThread.getId());
         }
     }
 
@@ -138,8 +151,9 @@ public class ClientThread implements Runnable{
                 try {
                     synchronized (ClientThread.this) {
                         while (!messagePending) {
-                            wait();
+                            ClientThread.this.wait();
                         }
+                        System.out.println("Sender thread notified to send message");
                         if (newMessage != null) {
                             oos.writeObject(newMessage);
                             oos.flush();
@@ -166,21 +180,22 @@ public class ClientThread implements Runnable{
                     Object obj = ois.readObject();
                     if (obj instanceof Message) {
                         Message message = (Message) obj;
+                        System.out.println("Message "+message.getContent()+"recieved from user: " + message.getSender()+" to "+message.getReciepent()+" at "+message.getTimestamp());
                         ServerDataHandler.getInstance().addNewMessage(message,user.getUsername());
-
-                    } else {
-                        System.err.println("Received unknown object: " + obj.getClass().getName());
+                    } else if( obj instanceof String){  // Assuming the object is a String for searching users
+                        String searchUsername = (String) obj;
+                        System.out.println("Searching for user: " + searchUsername);
+                        if(ServerDataHandler.getInstance().seachUser(searchUsername) != null) {
+                            oos.writeObject(searchUsername);
+                        } else {
+                            oos.writeObject("###"); // Indicating that the user was not found
+                        }
                     }
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println(user.getUsername()+" disconnected. Message reciver exiting");
             }
-        }
-    }
-    class UpdatePusher implements Runnable {
-        @Override
-        public void run() {
-            // Logic for pushing updates to the client
         }
     }
 }

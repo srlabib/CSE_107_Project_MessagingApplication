@@ -4,6 +4,8 @@ import com.SharedClasses.ChatThread;
 import com.SharedClasses.Message;
 import com.SharedClasses.User;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -13,17 +15,25 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientDataHandler {
-    public Map<String, ChatThread> charThreads = new ConcurrentHashMap<String, ChatThread>();
+    public Map<String, ChatThread> chatThread = new ConcurrentHashMap<String, ChatThread>();
     // This VBox to hold all chats to be displayed in the main UI
     private Map<String, VBox> chatThreadViews = new ConcurrentHashMap<String, VBox>();
     public ScrollPane scrollPane;
 
     private static ClientDataHandler INSTANCE;
     User currentUser;
+    public String searchResult;
+    public boolean resultRecieved = false;
+    final public Object searchLock = new Object();
+    public SortedList<ChatThread> sortedChatThreads;
+    public ObservableList<ChatThread> observableArrayList;
+    public MainUIController uiController;
+
 
 
     public static ClientDataHandler getInstance() {
@@ -44,9 +54,10 @@ public class ClientDataHandler {
 
     public void loadData(Map<String, ChatThread> pastChatThreads) {
         // Loading previous chat threads from the server
-        this.charThreads = pastChatThreads;
 
-        for(var entry : charThreads.entrySet()) {
+        this.chatThread = pastChatThreads;
+
+        for(var entry : chatThread.entrySet()) {
             VBox chatThreadView = new VBox();
             chatThreadView.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             var chatMessages = entry.getValue().getMessageList();
@@ -65,6 +76,9 @@ public class ClientDataHandler {
             chatThreadViews.put(entry.getKey(), chatThreadView);
         }
 
+        observableArrayList = javafx.collections.FXCollections.observableArrayList(chatThread.values());
+        sortedChatThreads = new SortedList<>(observableArrayList, Comparator.comparing(ChatThread::getLastUpdated));
+
     }
 
     public String getCurrentUsername() {
@@ -76,7 +90,7 @@ public class ClientDataHandler {
 
     public void clearData() {
         // Clear the chat threads data
-        charThreads.clear();
+        chatThread.clear();
         currentUser = null;
     }
 
@@ -84,21 +98,30 @@ public class ClientDataHandler {
         // Generate the chat thread ID based on the current user and the message sender
         String chatThreadId = message.getThreadID();
         // Search for the chat thread in the existing threads
-        ChatThread chatThread = charThreads.get(chatThreadId);
+        ChatThread chatThread = this.chatThread.get(chatThreadId);
 
         if (chatThread == null) {
             // If the chat thread does not exist, create a new one
             chatThread = new ChatThread(chatThreadId, new String[]{currentUser.getUsername(),message.getSender()});
-            charThreads.put(chatThreadId, chatThread);
+            this.chatThread.put(chatThreadId, chatThread);
 
             VBox chatThreadView = new VBox();
-            chatThreadView.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+            chatThreadView.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             chatThreadViews.put(chatThreadId, chatThreadView);
 
         }
         // Push the message to the chat thread
         chatThread.pushMessage(message);
         addMessageToVbox(message,chatThreadViews.get(chatThreadId));
+    }
+
+    public void addChatThreadView(ChatThread chatThread) {
+        VBox chatThreadView = new VBox();
+        chatThreadView.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        for(Message message:chatThread.getMessageList()){
+            addMessageToVbox(message,chatThreadView);
+        }
+        chatThreadViews.put(chatThread.getId(), chatThreadView);
     }
 
     private double calculateMessageHeight(Label label) {

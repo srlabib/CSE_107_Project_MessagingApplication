@@ -97,21 +97,27 @@ public class ServerDataHandler {
         // Generate the chat thread ID based on the current user and the message sender
         String chatThreadId = message.getThreadID();
         // Search for the chat thread in the existing threads
-        ChatThread chatThread = charThreads.get(chatThreadId);
+        ChatThread chatThread ;
 
-        if (chatThread == null) {
+        if (chatThreadId == null) {
+            System.out.println("Chat thread ID is null, generating a new one.");
             // If the chat thread does not exist, create a new one
-            chatThread = new ChatThread(chatThreadId, new String[]{username,message.getSender()});
+            chatThreadId = ChatThread.generateID(message.getSender(), message.getReciepent());
+            chatThread = new ChatThread(chatThreadId, new String[]{message.getSender(),message.getReciepent()});
             charThreads.put(chatThreadId, chatThread);
             chatThread.pushMessage(message);
+
             for(String participant : chatThread.getParticipants()) {
+                users.get(participant).addChatThread(chatThreadId);
                 ClientThread clientThread = activeUsers.get(participant);
                 if (clientThread != null) {
                     clientThread.sendNewChatThread(chatThread);
                 }
+                saveUsers();
             }
         }
         else{
+            chatThread = charThreads.get(chatThreadId);
             chatThread.pushMessage(message);
             for(String participant : chatThread.getParticipants()) {
                 ClientThread clientThread = activeUsers.get(participant);
@@ -120,16 +126,9 @@ public class ServerDataHandler {
                 }
             }
         }
+        saveChatThreads();
         // Push the message to the chat thread
 
-
-        // Send the message to all active participants
-        for(String participant : chatThread.getParticipants()) {
-            ClientThread clientThread = activeUsers.get(participant);
-            if (clientThread != null) {
-                clientThread.sendMessage(message);
-            }
-        }
     }
 
     public void addActiveUser(String username, ClientThread clientThread) {
@@ -142,4 +141,18 @@ public class ServerDataHandler {
         }
         activeUsers.remove(username);
     }
+
+    public ChatThread getChatThread(String id) {
+        return charThreads.get(id);
+    }
+
+    public Map<String, User> getUsers() {
+        return users;
+    }
+
+    public Map<String, ChatThread> getCharThreads() {
+        return charThreads;
+    }
+
+
 }

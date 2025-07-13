@@ -1,9 +1,14 @@
 package com.messagingapplication;
 
 import com.SharedClasses.AuthenticationData;
+import com.SharedClasses.ChatThread;
+import com.SharedClasses.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -13,6 +18,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RegisterController {
 
@@ -29,11 +36,13 @@ public class RegisterController {
         stage.setScene(LoadPage.loadFXML("loginPage.fxml"));
         stage.show();
     }
-    public void CreateAccount(ActionEvent e) throws IOException {
+    public void CreateAccount(ActionEvent e) throws IOException, ClassNotFoundException {
 
         String name = usernameField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
+        ObjectOutputStream oos;
+        ObjectInputStream ois;
 
         if(name.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()){
             System.out.println("Please fill all fields");
@@ -48,8 +57,8 @@ public class RegisterController {
         try {
             socket = new Socket("localhost", 2222);
             AuthenticationData data = new AuthenticationData(name,"Labib",password);
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
 
             oos.writeObject(data);
             oos.flush();
@@ -65,6 +74,34 @@ public class RegisterController {
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
+
+
+        User currentUser = (User) ois.readObject();
+        Map<String, ChatThread> chatThreads = (ConcurrentHashMap<String, ChatThread>) ois.readObject();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainUI.fxml"));
+        Parent root = loader.load();
+
+        MainUIController mainUIController = loader.getController();
+        mainUIController.oos = oos;
+        mainUIController.chatThreads = chatThreads;
+
+        // Updating required data in ClientDataHandler from the server
+        ClientDataHandler.getInstance().setCurrentUser(currentUser);
+        ClientDataHandler.getInstance().scrollPane = mainUIController.getScrollPane();
+        ClientDataHandler.getInstance().uiController = mainUIController;
+        ClientDataHandler.getInstance().loadData(chatThreads);
+        mainUIController.loadUIData(); // Initialize UI with chat threads
+        mainUIController.clientDataHandler = ClientDataHandler.getInstance();
+
+
+
+        new MessageReciever(ois);
+
+        Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        stage.setTitle("Messaging Application - " + currentUser.getUsername());
+        stage.setScene(new Scene(root));
+        stage.show();
 
 
     }

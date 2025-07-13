@@ -16,6 +16,7 @@ public class User implements Serializable {
         this.username = username;
         this.password = password;
         this.name = name;
+        chatThreads = new HashSet<String>();
     }
 
     public String getUsername() {
@@ -27,6 +28,14 @@ public class User implements Serializable {
         if (!this.password.equals(password)) {
             throw new IllegalArgumentException("Password does not match");
         }
+    }
+
+    public HashSet<String> getChatThreads() {
+        return chatThreads;
+    }
+
+    public void addChatThread(String chatThreadId) {
+        chatThreads.add(chatThreadId);
     }
 
     public void setPassword(String password) {
