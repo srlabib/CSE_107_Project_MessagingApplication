@@ -4,8 +4,8 @@ import com.SharedClasses.ChatThread;
 import com.SharedClasses.Message;
 import com.SharedClasses.User;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -15,6 +15,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +33,6 @@ public class ClientDataHandler {
     public String searchResult;
     public boolean resultRecieved = false;
     final public Object searchLock = new Object();
-    public SortedList<ChatThread> sortedChatThreads;
     public ObservableList<ChatThread> observableArrayList;
     public MainUIController uiController;
 
@@ -62,8 +64,14 @@ public class ClientDataHandler {
             chatThreadView.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             var chatMessages = entry.getValue().getMessageList();
 
+            LocalDateTime last = null;
             for(Message message:chatMessages){
-                addMessageToVbox(message,chatThreadView);
+                if(last == null || Duration.between(last, message.getTimestamp()).toMinutes() > 5) {
+                    last = message.getTimestamp();
+                    addMessageToVbox(message, chatThreadView, true);
+                } else {
+                    addMessageToVbox(message, chatThreadView, false);
+                }
             }
 
             // Adding a listener to auto-scroll to the bottom when new messages are added
@@ -77,7 +85,7 @@ public class ClientDataHandler {
         }
 
         observableArrayList = javafx.collections.FXCollections.observableArrayList(chatThread.values());
-        sortedChatThreads = new SortedList<>(observableArrayList, Comparator.comparing(ChatThread::getLastUpdated));
+        FXCollections.sort(observableArrayList, Comparator.comparing(ChatThread::getLastUpdated).reversed());
 
     }
 
@@ -112,14 +120,21 @@ public class ClientDataHandler {
         }
         // Push the message to the chat thread
         chatThread.pushMessage(message);
-        addMessageToVbox(message,chatThreadViews.get(chatThreadId));
+        Duration gap = Duration.between(chatThread.getLastUpdated(), message.getTimestamp());
+        addMessageToVbox(message,chatThreadViews.get(chatThreadId), gap.toMinutes() > 5);
     }
 
     public void addChatThreadView(ChatThread chatThread) {
         VBox chatThreadView = new VBox();
         chatThreadView.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        LocalDateTime last = null;
         for(Message message:chatThread.getMessageList()){
-            addMessageToVbox(message,chatThreadView);
+            if(last == null || Duration.between(last, message.getTimestamp()).toMinutes() > 5) {
+                last = message.getTimestamp();
+                addMessageToVbox(message, chatThreadView, true);
+            } else {
+                addMessageToVbox(message, chatThreadView, false);
+            }
         }
         chatThreadViews.put(chatThread.getId(), chatThreadView);
     }
@@ -131,34 +146,30 @@ public class ClientDataHandler {
         return text.getLayoutBounds().getHeight() + 20; // Add label padding
     }
 
-    private void addMessageToVbox(Message message, VBox messageContainer) {
+    private void addMessageToVbox(Message message, VBox messageContainer,boolean addTime) {
         boolean isSentByUser = message.getSender().equals(currentUser.getUsername());
-        // Create message label
         Label messageLabel = new Label(message.getContent());
         messageLabel.setWrapText(true);
         messageLabel.setMaxWidth(200);
         messageLabel.setFont(new Font("System", 13));
         messageLabel.setPadding(new Insets(10));
 
-        // Style based on sender
         String backgroundColor = isSentByUser ? "#0084ff" : "#e5e5ea";
         String textColor = isSentByUser ? "white" : "black";
         String borderRadius = isSentByUser ? "15 0 15 15" : "0 15 15 15";
 
         messageLabel.setStyle(String.format(
-                "-fx-background-color: %s; -fx-text-fill: %s; -fx-background-radius: %s;",
+                "-fx-background-color: %s; -fx-text-fill: %s; -fx-background-radius: %s; -fx-margin: 50,0,50,0;",
                 backgroundColor, textColor, borderRadius
         ));
 
-        // Calculate dimensions
         double width = 250;
         double height = calculateMessageHeight(messageLabel);
 
         // Create container
         AnchorPane messagePane = new AnchorPane();
 
-
-        messagePane.setPrefHeight(height+10);
+        messagePane.setPrefHeight(height+100);
         messagePane.setMinHeight(Region.USE_COMPUTED_SIZE);
 
         // Position based on sender
@@ -168,14 +179,32 @@ public class ClientDataHandler {
             AnchorPane.setLeftAnchor(messageLabel, 0.0);
         }
 
-        messagePane.getChildren().add(messageLabel);
-        // javaFx's Platform.runLater is used to ensure that the UI updates are done on the JavaFX Application Thread
-        Platform.runLater(()-> {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mma");
+        String formattedDateTime = message.getTimestamp().format(formatter).toLowerCase();
+
+        VBox messageWithTime = new VBox();
+        Label timeLabel = new Label(formattedDateTime);
+        timeLabel.setFont(new Font("System", 10));
+        timeLabel.setStyle("-fx-text-fill: #888888;");
+        if(addTime)messageWithTime.getChildren().addAll(timeLabel, messageLabel);
+        else messageWithTime.getChildren().add(messageLabel);
+
+
+        // Position the VBox inside the AnchorPane
+        if (isSentByUser) {
+            AnchorPane.setRightAnchor(messageWithTime, 0.0);
+        } else {
+            AnchorPane.setLeftAnchor(messageWithTime, 0.0);
+        }
+        messagePane.getChildren().add(messageWithTime);
+
+
+        VBox.setMargin(messagePane, new Insets(2, 5, 2, 5));
+        Platform.runLater(() -> {
             messageContainer.getChildren().add(messagePane);
         });
-
     }
-
 
 
 

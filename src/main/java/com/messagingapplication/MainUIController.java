@@ -1,6 +1,5 @@
 package com.messagingapplication;
 
-import com.AppServer.ClientThread;
 import com.SharedClasses.ChatListCell;
 import com.SharedClasses.ChatThread;
 import com.SharedClasses.Message;
@@ -8,11 +7,9 @@ import javafx.application.Platform;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -20,8 +17,6 @@ import java.time.LocalDateTime;
 import java.io.ObjectOutputStream;
 import java.util.Comparator;
 import java.util.Map;
-
-
 
 public class MainUIController {
 
@@ -37,7 +32,7 @@ public class MainUIController {
 
     @FXML private TextField messageInput;
     @FXML private ScrollPane scrollPane;
-    @FXML private ListView contactList;
+    @FXML protected ListView<ChatThread> contactList;
     @FXML private Label chatHeader;
     @FXML private TextField searchText;
 
@@ -57,8 +52,13 @@ public class MainUIController {
 
     public void loadUIData(){
 
-        contactList.setItems(ClientDataHandler.getInstance().sortedChatThreads);
-        contactList.setCellFactory(param -> new ChatListCell());
+        contactList.setItems(ClientDataHandler.getInstance().observableArrayList);
+        contactList.setCellFactory(new Callback<ListView<ChatThread>, ListCell<ChatThread>>() {
+            @Override
+            public ListCell<ChatThread> call(ListView<ChatThread> chatThreadListView) {
+                return new ChatListCell();
+            }
+        });
         contactList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 ChatThread seletedThread = (ChatThread) newSelection;
@@ -70,6 +70,7 @@ public class MainUIController {
                 openChatInbox(chatThreadView,seletedThread.getRemoteUserName(ClientDataHandler.getInstance().getCurrentUsername()));
             }
         });
+        contactList.refresh();
     }
 
     @FXML

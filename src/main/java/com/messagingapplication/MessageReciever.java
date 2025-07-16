@@ -3,9 +3,11 @@ package com.messagingapplication;
 import com.SharedClasses.ChatThread;
 import com.SharedClasses.Message;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.scene.layout.VBox;
 
 import java.io.ObjectInputStream;
+import java.util.Comparator;
 
 public class MessageReciever extends Thread{
     ObjectInputStream ois;
@@ -22,7 +24,10 @@ public class MessageReciever extends Thread{
                     System.out.println("New message received: " + ((Message) obj).getContent());
                     Message message = (Message) obj;
                     ClientDataHandler.getInstance().addNewMessage(message);
-
+                    Platform.runLater(() -> {
+                        FXCollections.sort(ClientDataHandler.getInstance().observableArrayList, Comparator.comparing(ChatThread::getLastUpdated).reversed());
+                        ClientDataHandler.getInstance().uiController.contactList.refresh();
+                    });
                 }
                 else if(obj instanceof String){
                     ClientDataHandler.getInstance().searchResult = (String) obj;
@@ -34,12 +39,14 @@ public class MessageReciever extends Thread{
                     }
                 }
                 else if(obj instanceof ChatThread){
+                    ChatThread chatThread = (ChatThread) obj;
+                    ClientDataHandler.getInstance().chatThread.put(chatThread.getId(),chatThread);
+                    ClientDataHandler.getInstance().observableArrayList.add(chatThread);
+                    ClientDataHandler.getInstance().addChatThreadView(chatThread);
                     Platform.runLater(() -> {
-                        ChatThread chatThread = (ChatThread) obj;
-                        ClientDataHandler.getInstance().chatThread.put(chatThread.getId(),chatThread);
-                        ClientDataHandler.getInstance().observableArrayList.add(chatThread);
-                        ClientDataHandler.getInstance().addChatThreadView(chatThread);
-                        ClientDataHandler.getInstance().uiController.loadUIData();
+                        FXCollections.sort(ClientDataHandler.getInstance().observableArrayList, Comparator.comparing(ChatThread::getLastUpdated).reversed());
+                        ClientDataHandler.getInstance().uiController.contactList.refresh();
+                        ClientDataHandler.getInstance().uiController.contactList.getSelectionModel().select(0);
                     });
                     System.out.println("New chat thread received: " + ((ChatThread) obj).getId());
                 }

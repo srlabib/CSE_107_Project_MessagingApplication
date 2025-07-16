@@ -1,3 +1,4 @@
+// File: src/main/java/com/messagingapplication/ChatListCellController.java
 package com.messagingapplication;
 
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ public class ChatListCellController {
     public void setName(String name) {
         nameLabel.setText(name);
     }
+
     public void setLastMessage(String message) {
         lastMessage.setText(message);
     }

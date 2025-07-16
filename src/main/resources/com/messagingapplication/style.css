@@ -1,14 +1,18 @@
 /* Light modern Telegram/WhatsApp-inspired style */
 
 .contact-pane {
-    -fx-background-color: #f0f2f5;
+    -fx-background-color: #16243e;
     -fx-padding: 15;
     -fx-pref-width: 250;
 }
 
 .contact-list {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+    -fx-background-color: #16243e;
+    -fx-control-inner-background: #16243e;
+}
+
+.contact-list .virtual-flow {
+    -fx-background-color: #16243e;
 }
 
 .section-title {
@@ -78,15 +82,20 @@
 
 .contact-cell {
     -fx-padding: 8;
-    -fx-background-color: white;
-    -fx-border-color: #e0e0e0;
-    -fx-border-width: 0 0 1 0;
+    -fx-background-color: #2d3b91;
     -fx-alignment: center-left;
+    -fx-border-radius: 10,10,10,10;
+    -fx-background-radius: 10,10,10,10;
 }
 
-.contact-cell:hover {
-    -fx-background-color: #f9f9f9;
-}
+/*.contact-cell:hover {*/
+/*    -fx-padding: 8;*/
+/*    -fx-background-color: #2d3b91;*/
+/*    -fx-border-color: #2d3b91;*/
+/*    -fx-alignment: center-left;*/
+/*    -fx-border-radius: 10,10,10,10;*/
+/*    -fx-background-radius: 10,10,10,10;*/
+/*}*/
 
 .profile-image {
     -fx-background-radius: 100;
@@ -98,11 +107,13 @@
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: #222;
+    -fx-background-color: TRANSPARENT;
 }
 
 .subtext-label {
     -fx-font-size: 12px;
     -fx-text-fill: #666;
+    -fx-background-color: TRANSPARENT;
 }
 
 .status-label {
