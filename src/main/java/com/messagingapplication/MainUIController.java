@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import org.opencv.videoio.VideoCapture;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -46,7 +47,6 @@ public class MainUIController {
         } else {
             System.err.println("Chat thread view not found for ID: " + currentChatThreadId);
         }
-
     }
 
 
