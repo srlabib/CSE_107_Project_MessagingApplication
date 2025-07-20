@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="480" prefWidth="640" styleClass="call-request-pane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.IncommingCallUIController">
+   <children>
+      <HBox layoutX="193.0" layoutY="422.0" prefHeight="59.0" prefWidth="254.0" styleClass="accept-reject-Hbox">
+         <children>
+            <ImageView fitHeight="55.0" fitWidth="61.0" onMouseClicked="#acceptCall" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@png/Accept.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="55.0" fitWidth="61.0" onMouseClicked="#rejectCall" pickOnBounds="true" preserveRatio="true" styleClass="accept-reject-Hbox">
+               <image>
+                  <Image url="@png/Decline.png" />
+               </image>
+            </ImageView>
+         </children></HBox>
+      <Label layoutX="193.0" layoutY="24.0" prefHeight="29.0" prefWidth="254.0" styleClass="name-label-incomingCall" text="Incomming Video Call" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <Label fx:id="participantName" layoutX="193.0" layoutY="106.0" prefHeight="29.0" prefWidth="254.0" styleClass="name-label-incomingCall" text="Caller Name" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

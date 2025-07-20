@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="mainPane" prefWidth="543.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.MainUIController">
@@ -24,14 +25,14 @@
                   <children>
                      <ImageView fitHeight="31.0" fitWidth="24.0" layoutX="5.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" styleClass="search-icon">
                         <image>
-                           <Image url="@icon.png" />
+                           <Image url="@png/icon.png" />
                         </image>
                      </ImageView>
                   </children>
                </AnchorPane>
             </children>
          </HBox>
-            <Label styleClass="section-title" text="Chats" />
+            <Label styleClass="section-title" text="Chats" textFill="WHITE" />
             <ListView fx:id="contactList" styleClass="contact-list" VBox.vgrow="ALWAYS" />
         </VBox>
     </left>
@@ -39,8 +40,18 @@
     <!-- Center: Chat Area -->
     <center>
         <VBox fx:id="chatPane" spacing="5" styleClass="chat-pane">
-            <!-- Contact Name -->
-            <Label fx:id="chatHeader" styleClass="chat-header" text="Select a contact" />
+         <HBox prefHeight="49.0" prefWidth="253.0">
+            <children>
+                  <!-- Contact Name -->
+                  <Label fx:id="chatHeader" prefHeight="40.0" prefWidth="165.0" styleClass="chat-header" text="Select a contact" />
+               <Pane prefHeight="21.0" prefWidth="53.0" styleClass="accept-reject-Hbox" />
+               <ImageView accessibleRole="BUTTON" fitHeight="32.0" fitWidth="40.0" onMouseClicked="#videoCall" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@png/videoCall.png" />
+                  </image>
+               </ImageView>
+            </children>
+         </HBox>
 
             <!-- Message View -->
             <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" styleClass="message-scroll" VBox.vgrow="ALWAYS">

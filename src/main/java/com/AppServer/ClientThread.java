@@ -1,9 +1,6 @@
 package com.AppServer;
 
-import com.SharedClasses.AuthenticationData;
-import com.SharedClasses.ChatThread;
-import com.SharedClasses.Message;
-import com.SharedClasses.User;
+import com.SharedClasses.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -142,6 +139,15 @@ public class ClientThread implements Runnable{
         }
     }
 
+    public void sendCallRequest(CallRequest callRequest) {
+        synchronized (ClientThread.this){
+            newMessage = callRequest;
+            messagePending = true;
+            ClientThread.this.notifyAll();
+            System.out.println("Notifying sender thread to send call request: " + callRequest.getSender() + " to " + callRequest.getRecipient());
+        }
+    }
+
 
     class MessageSender implements Runnable {
         @Override
@@ -190,6 +196,14 @@ public class ClientThread implements Runnable{
                         } else {
                             oos.writeObject("###"); // Indicating that the user was not found
                         }
+                    }
+                    else if(obj instanceof CallRequest){
+                        CallRequest callRequest = (CallRequest) obj;
+                        System.out.println("Call request received from " + callRequest.getSender() + " to " + callRequest.getRecipient());
+                        // Handle the call request, e.g., notify the receiver or log it
+                        ServerDataHandler.getInstance().handleCallRequest(callRequest);
+                    } else {
+                        System.err.println("Received unknown object: " + obj.getClass().getName());
                     }
                 }
             } catch (Exception e) {

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="480" prefWidth="640" styleClass="call-request-pane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.VideoCallUIController">
+    <children>
+      <ImageView fx:id="remoteView" fitHeight="460.0" fitWidth="680.0" pickOnBounds="true" preserveRatio="true" />
+        <HBox layoutX="193.0" layoutY="383.0" prefHeight="73.0" prefWidth="254.0" styleClass="accept-reject-Hbox">
+         <children>
+            <ImageView fitHeight="55.0" fitWidth="61.0" onMouseClicked="#rejectCall" pickOnBounds="true" preserveRatio="true" styleClass="accept-reject-Hbox">
+               <image>
+                  <Image url="@png/Decline.png" />
+               </image>
+            </ImageView>
+         </children></HBox>
+        <Label fx:id="participantName" layoutX="185.0" layoutY="25.0" prefHeight="29.0" prefWidth="254.0" styleClass="name-label-incomingCall" text="Name" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font size="23.0" />
+            </font>
+        </Label>
+      <Label fx:id="CallStatus" layoutX="185.0" layoutY="107.0" prefHeight="29.0" prefWidth="254.0" styleClass="name-label-incomingCall" text="Calling..." textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="localView" fitHeight="120.0" fitWidth="160.0" layoutX="466.0" layoutY="346.0" pickOnBounds="true" preserveRatio="true" />
+    </children>
+</AnchorPane>

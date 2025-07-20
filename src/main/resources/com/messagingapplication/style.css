@@ -150,4 +150,27 @@
     -fx-padding: 10 10;
 }
 
+/*Video call section*/
+.name-label-incomingCall{
+    -fx-font-size: 18px;
+    -fx-text-fill: #ffffff;
+    -fx-alignment: center;
+}
+.call-request-pane {
+    -fx-background-color: #16243e;
+    -fx-padding: 0;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 20;
+}
+.accept-reject-Hbox {
+    -fx-padding: 10;
+    -fx-spacing: 60;
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+.accept-reject-button {
+    -fx-margin: 0 50 0 50;
+}
+
 

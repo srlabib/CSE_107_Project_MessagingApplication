@@ -1,10 +1,10 @@
 package com.AppServer;
 
 
+import com.SharedClasses.CallRequest;
 import com.SharedClasses.ChatThread;
 import com.SharedClasses.Message;
 import com.SharedClasses.User;
-import javafx.scene.layout.VBox;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -155,4 +155,29 @@ public class ServerDataHandler {
     }
 
 
+    public void handleCallRequest(CallRequest callRequest) {
+        String sender  = callRequest.getSender();
+        String reciepent = callRequest.getRecipient();
+        if(callRequest.isProcessed()){
+            if(activeUsers.get(sender) != null) {
+                ClientThread senderThread = activeUsers.get(sender);
+                senderThread.sendCallRequest(callRequest);
+                System.out.println("The response is sent back to sender : " + sender);
+            } else {
+                System.out.println("Sender is not online, cannot send response");
+            }
+        }else{
+            if(activeUsers.get(reciepent) != null) {
+                ClientThread reciepentThread = activeUsers.get(reciepent);
+                reciepentThread.sendCallRequest(callRequest);
+                System.out.println("Call request sent from " + sender + " to " + reciepent);
+            } else {
+                callRequest.setResponse("The user is not online");
+                ClientThread senderThread = activeUsers.get(sender);
+                if(senderThread!=null)
+                    senderThread.sendCallRequest(callRequest);
+            }
+        }
+
+    }
 }

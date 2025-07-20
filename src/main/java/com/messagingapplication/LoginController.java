@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class LoginController {
+
     @FXML
     TextField usernameField;
     @FXML
@@ -42,11 +43,12 @@ public class LoginController {
 
         Socket socket;
         try {
-            socket = new Socket("localhost", 2222);
+            socket = new Socket(Instances.ip, 2222);
             AuthenticationData data = new AuthenticationData(name, password);
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
-
+            Instances.oos = oos;
+            Instances.ois = ois;
             oos.writeObject(data);
             oos.flush();
             String response = (String) ois.readObject();
@@ -85,9 +87,12 @@ public class LoginController {
         mainUIController.loadUIData(); // Initialize UI with chat threads
         mainUIController.clientDataHandler = ClientDataHandler.getInstance();
 
+        Instances.clientDataHandler = ClientDataHandler.getInstance();
+        Instances.mainUIController = mainUIController;
 
 
-        new MessageReciever(ois);
+
+        new MessageReciever(ois,oos);
 
         Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
         stage.setTitle("Messaging Application - " + currentUser.getUsername());
@@ -103,45 +108,6 @@ public class LoginController {
         stage.show();
 
     }
-
-/*
-    public void loadDummyDataAndShowMainUI(ActionEvent e) throws IOException {
-        // Dummy user
-        User currentUser = new User("testuser","pass" ,"Test User");
-
-        // Dummy chat threads
-        Map<String, ChatThread> chatThreads = new java.util.concurrent.ConcurrentHashMap<>();
-
-        // ChatThread 1
-        ChatThread thread1 = new ChatThread("thread1", new String[]{"testuser", "alice"});
-//        thread1.pushMessage(new Message("alice", "thread1", "Hello!", java.time.LocalDateTime.now().minusMinutes(10)));
-//        thread1.pushMessage(new Message("testuser", "thread1", "Hi Alice!", java.time.LocalDateTime.now().minusMinutes(9)));
-        chatThreads.put(thread1.getId(), thread1);
-
-        // ChatThread 2
-        ChatThread thread2 = new ChatThread("thread2", new String[]{"testuser", "bob"});
-//        thread2.pushMessage(new Message("bob", "thread2", "Hey, are you there?", java.time.LocalDateTime.now().minusMinutes(5)));
-        chatThreads.put(thread2.getId(), thread2);
-
-        // Load Main UI
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainUI.fxml"));
-        Parent root = loader.load();
-        MainUIController mainUIController = loader.getController();
-        mainUIController.chatThreads = chatThreads;
-
-        // Update ClientDataHandler
-        ClientDataHandler.getInstance().setCurrentUser(currentUser);
-        ClientDataHandler.getInstance().scrollPane = mainUIController.getScrollPane();
-        ClientDataHandler.getInstance().loadData(chatThreads);
-        mainUIController.loadUIData(); // Initialize UI with chat threads
-        mainUIController.clientDataHandler = ClientDataHandler.getInstance();
-
-        Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-*/
-
 
 
 }

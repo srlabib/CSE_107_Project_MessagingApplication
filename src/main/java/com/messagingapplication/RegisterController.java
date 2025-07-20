@@ -55,10 +55,13 @@ public class RegisterController {
 
         Socket socket;
         try {
-            socket = new Socket("localhost", 2222);
+            socket = new Socket(Instances.ip, 2222);
             AuthenticationData data = new AuthenticationData(name,"Labib",password);
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
+
+            Instances.oos = oos;
+            Instances.ois = ois;
 
             oos.writeObject(data);
             oos.flush();
@@ -96,7 +99,7 @@ public class RegisterController {
 
 
 
-        new MessageReciever(ois);
+        new MessageReciever(ois,oos);
 
         Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
         stage.setTitle("Messaging Application - " + currentUser.getUsername());

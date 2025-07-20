@@ -9,6 +9,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 import java.awt.image.BufferedImage;
@@ -33,7 +35,6 @@ public class Video extends Application {
         primaryStage.setTitle("Webcam Viewer");
         primaryStage.setScene(scene);
         primaryStage.show();
-
         startCamera();
     }
 
@@ -45,9 +46,11 @@ public class Video extends Application {
             cameraActive = true;
 
             Thread frameGrabber = new Thread(() -> {
-                Mat frame = new Mat();
+                Mat original = new Mat();
                 while (cameraActive) {
-                    if (capture.read(frame)) {
+                    if (capture.read(original)) {
+                        Mat frame = new Mat();
+                        Imgproc.resize(original, frame, new Size(640, 480));
                         WritableImage imageToShow = mat2Image(frame);
                         Platform.runLater(() -> imageView.setImage(imageToShow));
                         try {

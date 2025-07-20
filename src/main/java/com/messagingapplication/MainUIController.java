@@ -1,8 +1,10 @@
 package com.messagingapplication;
 
+import com.SharedClasses.CallRequest;
 import com.SharedClasses.ChatListCell;
 import com.SharedClasses.ChatThread;
 import com.SharedClasses.Message;
+import com.messagingapplication.VideoCall.VideoCall;
 import javafx.application.Platform;
 
 import javafx.event.ActionEvent;
@@ -25,17 +27,80 @@ public class MainUIController {
     ObjectOutputStream oos;
     String currentChatThreadId;
     public Map<String, ChatThread> chatThreads;
-
+    public boolean isVideoCallActive = false;
     @FXML
     public void initialize() {
         clientDataHandler = ClientDataHandler.getInstance();
     }
+
+
 
     @FXML private TextField messageInput;
     @FXML private ScrollPane scrollPane;
     @FXML protected ListView<ChatThread> contactList;
     @FXML private Label chatHeader;
     @FXML private TextField searchText;
+
+
+    @FXML
+    public void search(ActionEvent e){
+        if(searchText.getText().isEmpty())return;
+        new searchUserTask(searchText.getText());
+    }
+
+    @FXML
+    public void send(ActionEvent event){
+
+        String messageText = messageInput.getText();
+        if (messageText.isEmpty()) {
+            return; // Do not send empty messages
+        }
+        String reciepent = currentChatThreadId==null?ClientDataHandler.getInstance().searchResult:ClientDataHandler.getInstance().chatThread.get(currentChatThreadId).getRemoteUserName(clientDataHandler.getCurrentUsername());
+        if(reciepent == null || reciepent.isEmpty()) {
+            System.err.println("No recipient selected for the message.");
+            return;
+        }
+        Runnable sendMessageTask = () -> {
+            // Create a new message object
+            Message message = new Message(clientDataHandler.currentUser.getUsername(),reciepent,currentChatThreadId ,messageText,LocalDateTime.now());
+            System.out.println();
+            try {
+                synchronized (oos) {
+                    System.out.println("Sending message: " + messageText + " to " + reciepent);
+                    oos.writeObject(message);
+                }
+            } catch (IOException e) {
+                System.err.println("Error sending message: " + e.getMessage());
+            }
+        };
+        new Thread(sendMessageTask).start();
+    }
+
+    @FXML
+    public void videoCall() {
+        String currentUser = ClientDataHandler.getInstance().getCurrentUsername();
+        if (isVideoCallActive) {
+            return;
+        }
+        if (currentChatThreadId == null) {
+            System.err.println("No chat thread selected for video call.");
+            return;
+        }
+        String remoteUser = clientDataHandler.chatThread.get(currentChatThreadId).getRemoteUserName(currentUser);
+        if (remoteUser == null || remoteUser.isEmpty()) {
+            System.err.println("Remote user not found for video call.");
+            return;
+        }
+
+        Runnable CallRequenstTask = () -> {
+            CallRequest callRequest = new CallRequest(currentUser, remoteUser);
+            VideoCall videoCall = new VideoCall(callRequest,oos);
+            Instances.videoCall = videoCall;
+            videoCall.start();
+        };
+        new Thread(CallRequenstTask).start();
+        System.out.println("Sending Call request: " +  "to" + remoteUser);
+    }
 
 
 
@@ -73,11 +138,7 @@ public class MainUIController {
         contactList.refresh();
     }
 
-    @FXML
-    public void search(ActionEvent e){
-        if(searchText.getText().isEmpty())return;
-        new searchUserTask(searchText.getText());
-    }
+
 
     class searchUserTask implements Runnable {
         private String username;
@@ -138,36 +199,6 @@ public class MainUIController {
             }
         }
     }
-
-    @FXML
-    public void send(ActionEvent event){
-
-        String messageText = messageInput.getText();
-        if (messageText.isEmpty()) {
-            return; // Do not send empty messages
-        }
-        String reciepent = currentChatThreadId==null?ClientDataHandler.getInstance().searchResult:ClientDataHandler.getInstance().chatThread.get(currentChatThreadId).getRemoteUserName(clientDataHandler.getCurrentUsername());
-        if(reciepent == null || reciepent.isEmpty()) {
-            System.err.println("No recipient selected for the message.");
-            return;
-        }
-        Runnable sendMessageTask = () -> {
-            // Create a new message object
-            Message message = new Message(clientDataHandler.currentUser.getUsername(),reciepent,currentChatThreadId ,messageText,LocalDateTime.now());
-            System.out.println();
-            try {
-                synchronized (oos) {
-                    System.out.println("Sending message: " + messageText + " to " + reciepent);
-                    oos.writeObject(message);
-                }
-            } catch (IOException e) {
-                System.err.println("Error sending message: " + e.getMessage());
-            }
-
-        };
-        new Thread(sendMessageTask).start();
-    }
-
 
 
 
