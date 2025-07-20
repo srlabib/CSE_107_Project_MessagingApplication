@@ -36,7 +36,7 @@ public class VideoCallUIController {
     }
 
     public void displayLocalVideo(WritableImage image) {
-        localView.setImage(image);
+        Platform.runLater(() ->localView.setImage(image));
     }
 
     public void displayRemoteVideo(WritableImage image) {

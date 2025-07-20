@@ -56,7 +56,7 @@ public class VideoStreaming extends Thread {
                         System.out.println("Error converting Mat to JPEG: " + e.getMessage());
                         e.printStackTrace();
                     }
-                    Platform.runLater(() -> videoCallUIController.displayLocalVideo(imageToShow));
+                    videoCallUIController.displayLocalVideo(imageToShow);
                     synchronized (oos){
                         try {
                             oos.writeObject(imageToSend);

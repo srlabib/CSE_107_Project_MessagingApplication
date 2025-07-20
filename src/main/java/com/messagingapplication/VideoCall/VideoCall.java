@@ -150,63 +150,74 @@ public class VideoCall extends Thread {
         });
     }
 
-    public void acceptCall(){
+    public void acceptCall() {
         callRequest.setIP(getLocalIpAddress());
         try {
+            // Create a server socket with automatic port selection
             serverSocket = new ServerSocket(0);
+            callRequest.setPort(serverSocket.getLocalPort());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        callRequest.setPort(serverSocket.getLocalPort());
         callRequest.setResponse("accepted");
         callRequest.setProcessed();
 
-        Thread waitingForConnection = new Thread(() -> {
+        // Create a separate UI thread
+        Platform.runLater(() -> {
+            // Close the incoming call UI
+            stage.close();
+
+            // Create new video call UI
+            stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/messagingapplication/VideoCall.fxml"));
             try {
+                Parent root = loader.load();
+                VideoCallUIController controller = loader.getController();
+                controller.setParticipantName(callRequest.getSender());
+                controller.setWaitingStatus(true); // Show "Connecting..." status
+                stage.setScene(new Scene(root));
+                stage.show();
+
+                // Start connection thread after UI is ready
+                startConnectionThread(controller);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void startConnectionThread(VideoCallUIController controller) {
+        Thread connectionThread = new Thread(() -> {
+            try {
+                // Send response to caller
                 synchronized (mainOos) {
                     mainOos.writeObject(callRequest);
                 }
+
                 System.out.println("Waiting for connection on " + callRequest.getIP() + ":" + callRequest.getPort());
-                Socket socket = serverSocket.accept();
+                Socket socket = serverSocket.accept(); // This blocks until connection is established
+
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
+
                 System.out.println("Connection established with " + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
-                // Here you can start the video streaming
+
+                // Update UI to show connected state
+                Platform.runLater(() -> controller.setWaitingStatus(false));
+
+                // Start video streaming on separate threads
+                videoStreaming = new VideoStreaming(oos, controller);
+                videoRecieving = new VideoRecieving(ois, controller);
+                videoStreaming.start();
+                videoRecieving.start();
+
             } catch (IOException e) {
                 System.out.println("Error while waiting for connection: " + e.getMessage());
+                Platform.runLater(() -> controller.setFailedStatus("Connection failed: " + e.getMessage()));
             }
         });
-        waitingForConnection.start();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        if(waitingForConnection.isAlive()){
-            System.out.println("Connection lost");
-        }
-        else{
-            // start video streaming
-            AtomicReference<VideoCallUIController> controller = new AtomicReference<>();
-            Platform.runLater(()->{
-//            stage.initStyle(StageStyle.UNDECORATED);
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/messagingapplication/VideoCall.fxml"));
-                Parent root = null;
-                try {
-                    root = loader.load();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                controller.set(loader.getController());
-                controller.get().setParticipantName(callRequest.getSender());
-                controller.get().setWaitingStatus(false);
-                stage.setScene(new Scene(root));
-                stage.show();
-                System.out.println("Stage is showing for video call");
-                startVideoStreamingRecieving(controller, oos, ois);
-            });
-
-        }
+        connectionThread.setDaemon(true);
+        connectionThread.start();
     }
 
     private void startVideoStreamingRecieving(AtomicReference<VideoCallUIController> controller, ObjectOutputStream oos, ObjectInputStream ois) {

@@ -35,7 +35,6 @@ public class VideoRecieving extends Thread{
                 WritableImage imageToShow = jpegToImage(image);
                 System.out.println("Received image of size: " + imageToShow.getWidth() + "x" + imageToShow.getHeight());
                 videoCallUIController.displayRemoteVideo(imageToShow);
-
             }
             // the call is declined or ended
             catch(EOFException e){
