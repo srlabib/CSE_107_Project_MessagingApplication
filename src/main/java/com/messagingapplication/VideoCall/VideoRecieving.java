@@ -19,16 +19,18 @@ public class VideoRecieving extends Thread{
 
     private ObjectInputStream ois;
     private VideoCallUIController videoCallUIController;
+    private boolean active = true;
 
     public VideoRecieving(ObjectInputStream ois, VideoCallUIController videoCallUIController){
         this.ois = ois;
         this.videoCallUIController = videoCallUIController;
+        this.setName("Video Receiving Thread");
     }
 
     @Override
     public void run() {
         System.out.println("Starting video receiving...");
-        while(true){
+        while(active){
             try {
                 Object obj = ois.readObject();
                 byte [] image = (byte[]) obj;
@@ -65,5 +67,14 @@ public class VideoRecieving extends Thread{
     private BufferedImage jpegToBufferedImage(byte[] jpegData) throws IOException {
         ByteArrayInputStream bais = new ByteArrayInputStream(jpegData);
         return ImageIO.read(bais);
+    }
+
+    public void end(){
+        active = false;
+        try {
+            ois.close();
+        } catch (IOException e) {
+            System.err.println("Error closing ObjectInputStream: " + e.getMessage());
+        }
     }
 }

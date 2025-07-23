@@ -9,12 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.*;
 import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicReference;
@@ -27,6 +25,7 @@ public class VideoCall extends Thread {
     private Stage stage;
     private boolean responseRecieved = false;
     private ServerSocket serverSocket;
+    private Socket socket;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
     private VideoStreaming videoStreaming;
@@ -38,6 +37,8 @@ public class VideoCall extends Thread {
         Instances.mainUIController.isVideoCallActive = true;
         Instances.videoCall = this;
         currentUser = Instances.clientDataHandler.getCurrentUsername();
+        socket = null;
+        serverSocket = null;
         Platform.runLater(()-> {
             stage = new Stage();
         });
@@ -106,7 +107,6 @@ public class VideoCall extends Thread {
             Platform.runLater(()-> {
                 controller.get().setWaitingStatus(false);
             });
-            Socket socket;
             ObjectOutputStream oos;
             ObjectInputStream ois;
             try {
@@ -195,7 +195,7 @@ public class VideoCall extends Thread {
                 }
 
                 System.out.println("Waiting for connection on " + callRequest.getIP() + ":" + callRequest.getPort());
-                Socket socket = serverSocket.accept(); // This blocks until connection is established
+                socket = serverSocket.accept(); // This blocks until connection is established
 
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
@@ -254,13 +254,29 @@ public class VideoCall extends Thread {
         if(videoStreaming != null){
             videoStreaming.end();
         }
+        if(videoRecieving != null){
+            videoRecieving.end();
+        }
         Platform.runLater(()->{
             stage.close();
             Instances.mainUIController.isVideoCallActive = false;
             //Close threads for video calling
-
+            if(videoRecieving!= null){
+                videoRecieving.end();
+            }
             Instances.videoCall = null;
         });
+
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+            }
+        } catch (IOException e) {
+            System.err.println("Error closing sockets: " + e.getMessage());
+        }
     }
 
     private String getLocalIpAddress() {

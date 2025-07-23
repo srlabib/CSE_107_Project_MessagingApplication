@@ -2,7 +2,6 @@ package com.messagingapplication;
 
 import com.SharedClasses.AuthenticationData;
 import com.SharedClasses.ChatThread;
-import com.SharedClasses.Message;
 import com.SharedClasses.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,8 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.concurrent.Task;
-import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

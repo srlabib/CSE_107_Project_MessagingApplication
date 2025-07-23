@@ -1,8 +1,6 @@
 package com.messagingapplication.VideoCall;
 
-import com.SharedClasses.CallRequest;
 import com.messagingapplication.VideoCallUIController;
-import javafx.application.Platform;
 import javafx.scene.image.WritableImage;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -30,6 +28,7 @@ public class VideoStreaming extends Thread {
     public VideoStreaming(ObjectOutputStream oos, VideoCallUIController videoCallUIController) {
         this.videoCallUIController = videoCallUIController;
         this.oos = oos;
+        this.setName("Video Streaming Thread");
     }
 
     @Override
@@ -122,6 +121,11 @@ public class VideoStreaming extends Thread {
 
 
     public void end() {
+        try {
+            oos.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         cameraActive = false;
         if (capture != null && capture.isOpened()) {
             capture.release();

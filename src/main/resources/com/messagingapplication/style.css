@@ -159,8 +159,7 @@
 .call-request-pane {
     -fx-background-color: #16243e;
     -fx-padding: 0;
-    -fx-border-color: #ccc;
-    -fx-border-radius: 20;
+
 }
 .accept-reject-Hbox {
     -fx-padding: 10;

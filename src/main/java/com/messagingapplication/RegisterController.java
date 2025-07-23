@@ -22,8 +22,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RegisterController {
-
-
     @FXML
     private TextField usernameField;
     @FXML
