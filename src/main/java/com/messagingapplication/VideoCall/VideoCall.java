@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.InnerShadow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -30,6 +31,9 @@ public class VideoCall extends Thread {
     private ObjectInputStream ois;
     private VideoStreaming videoStreaming;
     private VideoRecieving videoRecieving;
+    private AudioSender audioSender;
+    private AudioReceiver audioReceiver;
+    private DatagramSocket datagramSocket;
 
     public VideoCall(CallRequest callRequest, ObjectOutputStream oos){
         mainOos = oos;
@@ -113,12 +117,41 @@ public class VideoCall extends Thread {
                 socket = new Socket(callRequest.getIP(),callRequest.getPort());
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
+
+                // sending a dummy packet to send the audio port
+                System.out.println("Port received: " + callRequest.getAudioPort());
+                datagramSocket = new DatagramSocket();
+                DatagramPacket dp = new DatagramPacket(new byte[0], 0, InetAddress.getByName(callRequest.getIP()), callRequest.getAudioPort());
+                datagramSocket.send(dp);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
-            // call main video streaming method
-            startVideoStreamingRecieving(controller, oos, ois);
+
+            // call main video streaming methods
+            InetAddress ip = null;
+            int port = callRequest.getPort();
+            try {
+                ip = InetAddress.getByName(callRequest.getIP());
+            } catch (UnknownHostException e) {
+                throw new RuntimeException(e);
+            }
+            videoStreaming = new VideoStreaming(oos,controller.get());
+            videoRecieving = new VideoRecieving(ois,controller.get());
+            audioSender = new AudioSender(datagramSocket, ip, port);
+            audioReceiver = new AudioReceiver(datagramSocket);
+
+            videoStreaming.start();
+            videoRecieving.start();
+            audioReceiver.start();
+            audioSender.start();
+
+            try {
+                videoStreaming.join();
+                videoRecieving.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
         }
         else{
@@ -153,9 +186,12 @@ public class VideoCall extends Thread {
     public void acceptCall() {
         callRequest.setIP(getLocalIpAddress());
         try {
-            // Create a server socket with automatic port selection
+
             serverSocket = new ServerSocket(0);
             callRequest.setPort(serverSocket.getLocalPort());
+            datagramSocket = new DatagramSocket();
+            callRequest.setAudioPort(datagramSocket.getLocalPort());
+            System.out.println("DatagramSocket created on port: " + callRequest.getAudioPort());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -200,6 +236,10 @@ public class VideoCall extends Thread {
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
 
+                // receiving a dummy packet to get the audio port
+                DatagramPacket dp = new DatagramPacket(new byte[0], 0);
+                datagramSocket.receive(dp);
+
                 System.out.println("Connection established with " + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
 
                 // Update UI to show connected state
@@ -208,8 +248,12 @@ public class VideoCall extends Thread {
                 // Start video streaming on separate threads
                 videoStreaming = new VideoStreaming(oos, controller);
                 videoRecieving = new VideoRecieving(ois, controller);
+                audioSender = new AudioSender(datagramSocket, dp.getAddress(), callRequest.getAudioPort());
+                audioReceiver = new AudioReceiver(datagramSocket);
                 videoStreaming.start();
                 videoRecieving.start();
+                audioSender.start();
+                audioReceiver.start();
 
             } catch (IOException e) {
                 System.out.println("Error while waiting for connection: " + e.getMessage());
@@ -220,18 +264,8 @@ public class VideoCall extends Thread {
         connectionThread.start();
     }
 
-    private void startVideoStreamingRecieving(AtomicReference<VideoCallUIController> controller, ObjectOutputStream oos, ObjectInputStream ois) {
-        videoStreaming = new VideoStreaming(oos,controller.get());
-        videoRecieving = new VideoRecieving(ois,controller.get());
-        videoStreaming.start();
-        videoRecieving.start();
+    private void startVideoStreamingReceiving(AtomicReference<VideoCallUIController> controller) {
 
-        try {
-            videoStreaming.join();
-            videoRecieving.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 

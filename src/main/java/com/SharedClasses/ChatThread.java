@@ -11,7 +11,7 @@ public class ChatThread implements Serializable {
     private LocalDateTime lastUpdated = LocalDateTime.now(); // timestamp of the last update to the chat thread
     private final String id; // unique identifier for the chat thread
     private final String[] participants; // usernames of participants in the chat thread
-    private ArrayList<Message> messageList = new ArrayList<>();// array of messages in the chat thread
+    private final ArrayList<Message> messageList = new ArrayList<>();// array of messages in the chat thread
 
 
 

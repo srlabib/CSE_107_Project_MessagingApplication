@@ -11,6 +11,7 @@ public class CallRequest implements Serializable {
     private int port;
     private String response;
     private boolean processed;
+    private int audioPort;
 
     public CallRequest(String sender, String recipient) {
         this.sender = sender;
@@ -38,12 +39,20 @@ public class CallRequest implements Serializable {
         return port;
     }
 
+    public int getAudioPort() {
+        return audioPort;
+    }
+
     public void setIP(String IP) {
         this.IP = IP;
     }
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public void setAudioPort(int audioPort) {
+        this.audioPort = audioPort;
     }
 
     public void setResponse(String response) {

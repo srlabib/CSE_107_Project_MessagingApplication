@@ -14,12 +14,9 @@ public class ClientThread implements Runnable{
     Socket socket;
     ObjectOutputStream oos;
     ObjectInputStream ois;
-    private ServerDataHandler dataHandler;
+    private final ServerDataHandler dataHandler;
     Object newMessage;
     boolean messagePending;
-    private Thread senderThread;
-    private Thread receiverThread;
-    private MessageSender sender;
 
 
 
@@ -92,8 +89,8 @@ public class ClientThread implements Runnable{
         }
 
 
-        senderThread = new Thread(sender = new MessageSender());
-        receiverThread = new Thread(new MessageReceiver());
+        Thread senderThread = new Thread(new MessageSender());
+        Thread receiverThread = new Thread(new MessageReceiver());
 
 
         senderThread.start();
@@ -184,12 +181,10 @@ public class ClientThread implements Runnable{
             try {
                 while (true) {
                     Object obj = ois.readObject();
-                    if (obj instanceof Message) {
-                        Message message = (Message) obj;
+                    if (obj instanceof Message message) {
                         System.out.println("Message "+message.getContent()+"recieved from user: " + message.getSender()+" to "+message.getReciepent()+" at "+message.getTimestamp());
                         ServerDataHandler.getInstance().addNewMessage(message,user.getUsername());
-                    } else if( obj instanceof String){  // Assuming the object is a String for searching users
-                        String searchUsername = (String) obj;
+                    } else if(obj instanceof String searchUsername){  // Assuming the object is a String for searching users
                         System.out.println("Searching for user: " + searchUsername);
                         if(ServerDataHandler.getInstance().seachUser(searchUsername) != null) {
                             oos.writeObject(searchUsername);
@@ -197,8 +192,7 @@ public class ClientThread implements Runnable{
                             oos.writeObject("###"); // Indicating that the user was not found
                         }
                     }
-                    else if(obj instanceof CallRequest){
-                        CallRequest callRequest = (CallRequest) obj;
+                    else if(obj instanceof CallRequest callRequest){
                         System.out.println("Call request received from " + callRequest.getSender() + " to " + callRequest.getRecipient());
                         // Handle the call request, e.g., notify the receiver or log it
                         ServerDataHandler.getInstance().handleCallRequest(callRequest);
