@@ -26,7 +26,7 @@ public class AudioSender extends Thread{
     @Override
     public void run() {
 
-        AudioFormat format = new AudioFormat(44100.0f, 16, 1, true, false);
+        AudioFormat format = new AudioFormat(16000, 16, 1, true, false);
         DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
         // Open microphone
