@@ -15,6 +15,7 @@ public class AudioReceiver extends Thread {
 
     @Override
     public void run() {
+        System.out.println("Starting audio receiving...");
         AudioFormat format = new AudioFormat(44100.0f, 16, 1, true, false);
         DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
@@ -31,11 +32,13 @@ public class AudioReceiver extends Thread {
 
         while (active) {
             try {
+                System.out.println("Waiting for audio packet...");
                 datagramSocket.receive(packet);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             speakers.write(packet.getData(), 0, packet.getLength());
+            System.out.println("Received audio packet of size: " + packet.getLength() + " bytes");
         }
     }
 

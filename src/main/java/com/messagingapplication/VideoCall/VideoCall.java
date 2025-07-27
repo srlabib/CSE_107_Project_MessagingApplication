@@ -121,7 +121,8 @@ public class VideoCall extends Thread {
                 // sending a dummy packet to send the audio port
                 System.out.println("Port received: " + callRequest.getAudioPort());
                 datagramSocket = new DatagramSocket();
-                DatagramPacket dp = new DatagramPacket(new byte[0], 0, InetAddress.getByName(callRequest.getIP()), callRequest.getAudioPort());
+                System.out.println("My ip: " + datagramSocket.getLocalAddress().getHostAddress()+" Port: " + datagramSocket.getLocalPort());
+                DatagramPacket dp = new DatagramPacket(new byte[1024], 1024, InetAddress.getByName(callRequest.getIP()), callRequest.getAudioPort());
                 datagramSocket.send(dp);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -130,7 +131,7 @@ public class VideoCall extends Thread {
 
             // call main video streaming methods
             InetAddress ip = null;
-            int port = callRequest.getPort();
+            int port = callRequest.getAudioPort();
             try {
                 ip = InetAddress.getByName(callRequest.getIP());
             } catch (UnknownHostException e) {
@@ -138,13 +139,13 @@ public class VideoCall extends Thread {
             }
             videoStreaming = new VideoStreaming(oos,controller.get());
             videoRecieving = new VideoRecieving(ois,controller.get());
-            audioSender = new AudioSender(datagramSocket, ip, port);
+            audioSender = new AudioSender(ip, port);
             audioReceiver = new AudioReceiver(datagramSocket);
 
             videoStreaming.start();
             videoRecieving.start();
-            audioReceiver.start();
             audioSender.start();
+            audioReceiver.start();
 
             try {
                 videoStreaming.join();
@@ -184,6 +185,7 @@ public class VideoCall extends Thread {
     }
 
     public void acceptCall() {
+        System.out.println("Local IP Address: " + getLocalIpAddress());
         callRequest.setIP(getLocalIpAddress());
         try {
 
@@ -237,9 +239,9 @@ public class VideoCall extends Thread {
                 ois = new ObjectInputStream(socket.getInputStream());
 
                 // receiving a dummy packet to get the audio port
-                DatagramPacket dp = new DatagramPacket(new byte[0], 0);
+                DatagramPacket dp = new DatagramPacket(new byte[1024], 1024);
                 datagramSocket.receive(dp);
-
+                System.out.println("Received audio port: " + dp.getPort()+" IP: " + dp.getAddress().getHostAddress());
                 System.out.println("Connection established with " + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
 
                 // Update UI to show connected state
@@ -248,7 +250,7 @@ public class VideoCall extends Thread {
                 // Start video streaming on separate threads
                 videoStreaming = new VideoStreaming(oos, controller);
                 videoRecieving = new VideoRecieving(ois, controller);
-                audioSender = new AudioSender(datagramSocket, dp.getAddress(), callRequest.getAudioPort());
+                audioSender = new AudioSender(dp.getAddress(), dp.getPort());
                 audioReceiver = new AudioReceiver(datagramSocket);
                 videoStreaming.start();
                 videoRecieving.start();
@@ -290,6 +292,12 @@ public class VideoCall extends Thread {
         }
         if(videoRecieving != null){
             videoRecieving.end();
+        }
+        if(audioSender != null){
+            audioSender.end();
+        }
+        if(audioReceiver != null){
+            audioReceiver.end();
         }
         Platform.runLater(()->{
             stage.close();

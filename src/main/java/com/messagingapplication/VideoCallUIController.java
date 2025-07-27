@@ -40,10 +40,9 @@ public class VideoCallUIController {
     }
 
     public void displayRemoteVideo(WritableImage image) {
-        System.out.println("setting image to remote view");
+//        System.out.println("setting image to remote view");
         Platform.runLater(() ->remoteView.setImage(image));
-        System.out.println("program is still running");
+//        System.out.println("program is still running");
     }
-
 
 }

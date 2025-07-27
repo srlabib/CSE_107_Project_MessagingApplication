@@ -98,7 +98,7 @@ public class VideoStreaming extends Thread {
     private BufferedImage matToBufferedImage(Mat original) {
         int width = original.width(), height = original.height(), channels = original.channels();
         byte[] sourcePixels = new byte[width * height * channels];
-        System.out.println(width*height* channels);
+//        System.out.println(width*height* channels);
         original.get(0, 0, sourcePixels);
 
         BufferedImage image;
