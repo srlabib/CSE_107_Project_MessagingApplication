@@ -86,7 +86,7 @@
 
 .contact-cell {
     -fx-padding: 8;
-    -fx-background-color: #2d3b91;
+    -fx-background-color: #1a1a1a;
     -fx-alignment: center-left;
     -fx-border-radius: 10,10,10,10;
     -fx-background-radius: 10,10,10,10;
@@ -116,7 +116,7 @@
 
 .subtext-label {
     -fx-font-size: 12px;
-    -fx-text-fill: #666;
+    -fx-text-fill: #ffffff;
     -fx-background-color: TRANSPARENT;
 }
 
@@ -180,3 +180,5 @@
     -fx-background-color: white;
     -fx-background-radius: 15;
 }
+
+
