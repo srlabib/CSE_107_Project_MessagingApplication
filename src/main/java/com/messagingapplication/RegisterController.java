@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -28,6 +29,8 @@ public class RegisterController {
     private PasswordField passwordField;
     @FXML
     private PasswordField confirmPasswordField;
+    @FXML
+    Label errorMessage2;
 
     public void moveToLogin(ActionEvent e) throws IOException {
         Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
@@ -43,11 +46,11 @@ public class RegisterController {
         ObjectInputStream ois;
 
         if(name.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()){
-            System.out.println("Please fill all fields");
+            errorMessage2.setText("Please fill all fields");
             return;
         }
         if(!password.equals(confirmPassword)){
-            System.out.println("Passwords do not match");
+            errorMessage2.setText("Passwords do not match");
             return;
         }
 

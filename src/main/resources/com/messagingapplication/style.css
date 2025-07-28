@@ -140,8 +140,6 @@
     -fx-text-fill: #B0BEC5;
 }
 
-
-
 .user-search-field  {
 
     -fx-background-radius: 20;
@@ -188,4 +186,7 @@
     -fx-background-radius: 15;
 }
 
-
+.errorLabel {
+    -fx-text-fill: red;
+    -fx-font-size: 14px;
+}

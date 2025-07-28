@@ -23,7 +23,7 @@
          </image>
       </ImageView>
       <!-- Centered Card -->
-      <VBox alignment="CENTER" layoutX="451.0" layoutY="62.0" prefHeight="320.0" prefWidth="300.0" spacing="20.0" styleClass="loginBox" stylesheets="@style.css">
+      <VBox alignment="CENTER" layoutX="451.0" layoutY="62.0" prefHeight="331.0" prefWidth="317.0" spacing="20.0" styleClass="loginBox" stylesheets="@style.css">
          <padding>
             <Insets bottom="30" left="30" right="30" top="30" />
          </padding>
@@ -45,7 +45,7 @@
                <Font size="14" />
             </font>
          </PasswordField>
-         <Label alignment="CENTER" prefHeight="19.0" prefWidth="234.0" textAlignment="CENTER" />
+         <Label fx:id="errorMessage" alignment="CENTER" prefHeight="19.0" prefWidth="292.0" styleClass="errorLabel" textAlignment="CENTER" />
 
          <Button onAction="#login" prefHeight="40" prefWidth="140" style="-fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);                            -fx-background-radius: 20;                            -fx-text-fill: white;                            -fx-font-size: 14;" text="Login">
          </Button>

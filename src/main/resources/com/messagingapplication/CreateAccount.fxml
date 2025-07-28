@@ -72,7 +72,7 @@
                        <Font size="14" />
                    </font>
                </PasswordField>
-            <Label alignment="CENTER" prefHeight="19.0" prefWidth="234.0" textAlignment="CENTER" />
+            <Label fx:id="errorMessage2" alignment="CENTER" prefHeight="19.0" prefWidth="234.0" styleClass="errorLabel" stylesheets="@style.css" textAlignment="CENTER" />
    
                <Button onAction="#CreateAccount" prefHeight="40" prefWidth="160" style="-fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);                            -fx-background-radius: 20;                            -fx-text-fill: white;                            -fx-font-size: 14;" text="Create Account">
             </Button>
