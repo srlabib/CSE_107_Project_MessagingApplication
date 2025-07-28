@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -26,6 +27,9 @@ public class LoginController {
     TextField usernameField;
     @FXML
     TextField passwordField;
+    @FXML
+    Label errorMessage;
+
     public void login(ActionEvent e) throws IOException, ClassNotFoundException {
 
         String name = usernameField.getText();
@@ -34,7 +38,7 @@ public class LoginController {
         ObjectInputStream ois;
 
         if(name.isEmpty() || password.isEmpty()){
-            System.out.println("Please fill all fields");
+            errorMessage.setText("Username and password cannot be empty");
             return;
         }
 
@@ -52,7 +56,7 @@ public class LoginController {
             if(response.equals("successful")){
                 System.out.println("Login successful");
             } else {
-                System.out.println("Login failed: " + response);
+                errorMessage.setText(response);
                 return;
             }
         } catch (IOException ex) {
@@ -60,11 +64,6 @@ public class LoginController {
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
-
-        // first I need to get all the required data from the server
-        // and load the clientDataHandler with that data
-        // after that I can load the main UI
-        // the main UI will load its Vbox with the data from the clientDataHandler
 
         User currentUser = (User) ois.readObject();
         Map<String, ChatThread> chatThreads = (ConcurrentHashMap<String, ChatThread>) ois.readObject();

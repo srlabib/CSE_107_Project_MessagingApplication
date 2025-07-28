@@ -180,3 +180,8 @@
     -fx-background-color: white;
     -fx-background-radius: 15;
 }
+
+.error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 14px;
+}

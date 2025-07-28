@@ -26,7 +26,7 @@ public class User implements Serializable {
     public void verifyPassword(String password) {
         System.out.println(password+" "+this.password);
         if (!this.password.equals(password)) {
-            throw new IllegalArgumentException("Password does not match");
+            throw new IllegalArgumentException("Incorrect Password");
         }
     }
 
