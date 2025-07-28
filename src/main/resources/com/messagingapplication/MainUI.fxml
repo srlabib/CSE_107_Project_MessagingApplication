@@ -12,12 +12,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="mainPane" prefWidth="543.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.MainUIController">
 
     <!-- Left: Contact List -->
     <left>
-        <VBox fx:id="contactPane" spacing="10" styleClass="contact-pane">
+        <VBox fx:id="contactPane" prefHeight="553.0" spacing="10" styleClass="contact-pane">
          <HBox prefHeight="0.0" prefWidth="219.0" styleClass="search-box">
             <children>
                <TextField fx:id="searchText" onAction="#search" prefHeight="25.0" prefWidth="242.0" promptText="Search user" styleClass="user-search-field" />
@@ -32,14 +33,22 @@
                </AnchorPane>
             </children>
          </HBox>
-            <Label styleClass="section-title" text="Chats" textFill="WHITE" />
-            <ListView fx:id="contactList" styleClass="contact-list" VBox.vgrow="ALWAYS" />
+         <VBox styleClass="contact-list">
+            <children>
+               <Label prefHeight="56.0" prefWidth="94.0" styleClass="section-title" text="People" textFill="WHITE">
+                  <font>
+                     <Font size="21.0" />
+                  </font>
+               </Label>
+                  <ListView fx:id="contactList" styleClass="contact-list" VBox.vgrow="ALWAYS" />
+            </children>
+         </VBox>
         </VBox>
     </left>
 
     <!-- Center: Chat Area -->
     <center>
-        <VBox fx:id="chatPane" spacing="5" styleClass="chat-pane">
+        <VBox fx:id="chatPane" prefWidth="293.0" spacing="5" styleClass="chat-pane">
          <HBox prefHeight="49.0" prefWidth="253.0">
             <children>
                   <!-- Contact Name -->
@@ -52,18 +61,22 @@
                </ImageView>
             </children>
          </HBox>
-
-            <!-- Message View -->
-            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" styleClass="message-scroll" VBox.vgrow="ALWAYS">
+         <VBox prefHeight="494.0" prefWidth="293.0" styleClass="chat-pan2">
+            <children>
+      
+                                    <!-- Message View -->
+                  <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="452.0" prefWidth="293.0" styleClass="message-scroll" VBox.vgrow="ALWAYS">
 <!--                <VBox fx:id="messageContainer" spacing="10" styleClass="message-container"  />-->
             </ScrollPane>
-
-
-            <!-- Message Input -->
-            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="input-box">
-                <TextField fx:id="messageInput" promptText="Type a message..." styleClass="message-input" HBox.hgrow="ALWAYS" />
-                <Button fx:id="sendButton" onAction="#send" styleClass="send-button" text="Send" />
-            </HBox>
+      
+                              
+                                          <!-- Message Input -->
+                  <HBox alignment="CENTER_LEFT" spacing="10" styleClass="input-box">
+                      <TextField fx:id="messageInput" promptText="Type a message..." styleClass="message-input" HBox.hgrow="ALWAYS" />
+                      <Button fx:id="sendButton" onAction="#send" styleClass="send-button" text="Send" />
+                  </HBox>
+            </children>
+         </VBox>
         </VBox>
     </center>
 

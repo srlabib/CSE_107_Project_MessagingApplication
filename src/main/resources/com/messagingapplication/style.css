@@ -1,7 +1,7 @@
 /* Light modern Telegram/WhatsApp-inspired style */
 
 .contact-pane {
-    -fx-background-color: #121212;
+    -fx-background-color: #060520;
     -fx-padding: 15;
     -fx-pref-width: 250;
 }
@@ -9,6 +9,7 @@
 .contact-list {
     -fx-background-color: #1e1e1e;
     -fx-control-inner-background: #1e1e1e;
+    -fx-background-radius: 10;
 }
 
 .contact-list .virtual-flow {
@@ -16,20 +17,26 @@
 }
 
 .section-title {
-    -fx-font-size: 18px;
-    -fx-text-fill: #2e3a59;
+    -fx-font-size: 24px;
+    -fx-text-fill: #ffffff;
     -fx-font-weight: bold;
+    -fx-padding: 0 0 0 16;
 }
 
 .chat-pane {
+    -fx-background-color: #060520;
+    -fx-padding: 10 0 0 0;
+}
+.chat-pan2{
     -fx-background-color: #1e1e1e;
-    -fx-padding: 20;
+    -fx-padding: 0 0 10 0;
+    -fx-background-radius: 10;
 }
 
 .chat-header {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2e3a59;
+    -fx-text-fill: #ffffff;
     -fx-padding: 0 0 10 0;
 }
 .message-scroll {
@@ -66,7 +73,7 @@
 }
 
 .input-box {
-    -fx-padding: 10 0 0 0;
+    -fx-padding: 10 10 0 10;
 }
 
 .message-input {
@@ -110,13 +117,13 @@
 .name-label {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #222;
+    -fx-text-fill: #f3f0f0;
     -fx-background-color: TRANSPARENT;
 }
 
 .subtext-label {
     -fx-font-size: 12px;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #a0a0a0;
     -fx-background-color: TRANSPARENT;
 }
 
