@@ -97,6 +97,7 @@ public class LoginController {
         Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
         stage.setTitle("Messaging Application - " + currentUser.getUsername());
         stage.setScene(new Scene(root));
+        stage.setResizable(true);
         stage.show();
     }
 
@@ -105,6 +106,7 @@ public class LoginController {
         Parent root = FXMLLoader.load(getClass().getResource("CreateAccount.fxml"));
         Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+        stage.setResizable(false);
         stage.show();
 
     }

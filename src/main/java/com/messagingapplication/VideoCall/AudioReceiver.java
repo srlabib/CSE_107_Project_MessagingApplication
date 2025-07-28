@@ -12,6 +12,7 @@ public class AudioReceiver extends Thread {
 
     public AudioReceiver(DatagramSocket datagramSocket) {
         this.datagramSocket = datagramSocket;
+        this.setDaemon(true);
     }
 
     @Override

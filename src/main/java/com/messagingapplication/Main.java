@@ -12,6 +12,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         stage.setTitle("Messenger Application");
         stage.setScene(LoadPage.loadFXML("loginPage.fxml"));
+        stage.setResizable(false);
         stage.show();
     }
 

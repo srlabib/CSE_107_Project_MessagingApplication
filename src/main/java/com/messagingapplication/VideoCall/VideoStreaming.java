@@ -29,6 +29,7 @@ public class VideoStreaming extends Thread {
         this.videoCallUIController = videoCallUIController;
         this.oos = oos;
         this.setName("Video Streaming Thread");
+        this.setDaemon(true);
     }
 
     @Override

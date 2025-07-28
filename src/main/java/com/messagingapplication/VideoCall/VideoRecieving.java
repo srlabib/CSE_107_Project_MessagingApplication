@@ -25,6 +25,7 @@ public class VideoRecieving extends Thread{
         this.ois = ois;
         this.videoCallUIController = videoCallUIController;
         this.setName("Video Receiving Thread");
+        this.setDaemon(true);
     }
 
     @Override

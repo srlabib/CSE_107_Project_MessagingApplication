@@ -21,6 +21,7 @@ public class MessageReciever extends Thread{
         currentUser = ClientDataHandler.getInstance().getCurrentUsername();
         this.ois = ois;
         this.oos = oos;
+        this.setDaemon(true);
         this.start();
     }
     @Override

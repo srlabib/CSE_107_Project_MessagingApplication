@@ -33,14 +33,14 @@
                </AnchorPane>
             </children>
          </HBox>
-         <VBox styleClass="contact-list">
+         <VBox styleClass="contact-list" VBox.vgrow="ALWAYS">
             <children>
                <Label prefHeight="56.0" prefWidth="94.0" styleClass="section-title" text="People" textFill="WHITE">
                   <font>
                      <Font size="21.0" />
                   </font>
                </Label>
-                  <ListView fx:id="contactList" styleClass="contact-list" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="contactList" prefWidth="219.0" styleClass="contact-list" VBox.vgrow="ALWAYS" />
             </children>
          </VBox>
         </VBox>
@@ -48,12 +48,12 @@
 
     <!-- Center: Chat Area -->
     <center>
-        <VBox fx:id="chatPane" prefWidth="293.0" spacing="5" styleClass="chat-pane">
-         <HBox prefHeight="49.0" prefWidth="253.0">
+        <VBox fx:id="chatPane" prefWidth="316.0" spacing="5" styleClass="chat-pane">
+         <HBox alignment="CENTER" maxHeight="63.0" minHeight="63.0" prefHeight="63.0" prefWidth="278.0">
             <children>
                   <!-- Contact Name -->
                   <Label fx:id="chatHeader" prefHeight="40.0" prefWidth="165.0" styleClass="chat-header" text="Select a contact" />
-               <Pane prefHeight="21.0" prefWidth="53.0" styleClass="accept-reject-Hbox" />
+               <Pane prefHeight="21.0" prefWidth="53.0" styleClass="accept-reject-Hbox" HBox.hgrow="ALWAYS" />
                <ImageView accessibleRole="BUTTON" fitHeight="32.0" fitWidth="40.0" onMouseClicked="#videoCall" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@png/videoCall.png" />
@@ -61,7 +61,7 @@
                </ImageView>
             </children>
          </HBox>
-         <VBox prefHeight="494.0" prefWidth="293.0" styleClass="chat-pan2">
+         <VBox prefWidth="278.0" styleClass="chat-pan2" VBox.vgrow="ALWAYS">
             <children>
       
                                     <!-- Message View -->
@@ -72,8 +72,8 @@
                               
                                           <!-- Message Input -->
                   <HBox alignment="CENTER_LEFT" spacing="10" styleClass="input-box">
-                      <TextField fx:id="messageInput" promptText="Type a message..." styleClass="message-input" HBox.hgrow="ALWAYS" />
-                      <Button fx:id="sendButton" onAction="#send" styleClass="send-button" text="Send" />
+                      <TextField fx:id="messageInput" onAction="#send" promptText="Type a message..." styleClass="message-input" HBox.hgrow="ALWAYS" />
+                      <Button fx:id="sendButton" maxWidth="56.0" minWidth="56.0" onAction="#send" prefHeight="33.0" prefWidth="56.0" styleClass="send-button" text="Send" />
                   </HBox>
             </children>
          </VBox>

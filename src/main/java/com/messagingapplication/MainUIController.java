@@ -45,7 +45,19 @@ public class MainUIController {
     @FXML
     public void search(ActionEvent e){
         if(searchText.getText().isEmpty())return;
-        new searchUserTask(searchText.getText());
+        String searchUsername = searchText.getText();
+        if(searchUsername.equals(ClientDataHandler.getInstance().getCurrentUsername())){
+            return;
+        }
+        boolean userExists = false;
+        for(int i = 0; i<clientDataHandler.observableArrayList.size(); i++){
+            if(clientDataHandler.observableArrayList.get(i).getRemoteUserName(ClientDataHandler.getInstance().getCurrentUsername()).equals(searchUsername)){
+                contactList.getSelectionModel().select(i);
+                userExists = true;
+                break;
+            }
+        }
+        if(!userExists)new searchUserTask(searchText.getText());
     }
 
     @FXML
@@ -136,6 +148,7 @@ public class MainUIController {
             }
         });
         contactList.refresh();
+        contactList.getSelectionModel().select(0);
     }
 
 

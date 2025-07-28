@@ -11,9 +11,35 @@
     -fx-control-inner-background: #1e1e1e;
     -fx-background-radius: 10;
 }
+.contact-list .list-cell:selected {
+    -fx-background-color: #1a1a1a;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
 
-.contact-list .virtual-flow {
-    -fx-background-color: #16243e;
+.contact-list .list-cell:focused {
+    -fx-background-color: #1a1a1a;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.contact-list:focused .list-cell:selected {
+    -fx-background-color: #1a1a1a;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.contact-list .list-cell:selected .contact-cell {
+    -fx-background-color: #1a1a1a;
 }
 
 .section-title {
@@ -25,11 +51,12 @@
 
 .chat-pane {
     -fx-background-color: #060520;
-    -fx-padding: 10 0 0 0;
+    -fx-padding: 10 15 15 0;
 }
 .chat-pan2{
     -fx-background-color: #1e1e1e;
-    -fx-padding: 0 0 10 0;
+    -fx-padding: 10 10 10 10;
+    -fx-margin: 10 10 10 10;
     -fx-background-radius: 10;
 }
 

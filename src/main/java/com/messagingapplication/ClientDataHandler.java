@@ -151,16 +151,16 @@ public class ClientDataHandler {
         Label messageLabel = new Label(message.getContent());
         messageLabel.setWrapText(true);
         messageLabel.setMaxWidth(200);
-        messageLabel.setFont(new Font("System", 13));
+        messageLabel.setFont(new Font("Arial", 14));
         messageLabel.setPadding(new Insets(10));
 
-        String backgroundColor = isSentByUser ? "#0084ff" : "#e5e5ea";
+        String backgroundGradient = isSentByUser ? "linear-gradient(to top,#0084ff 76%, #4fbcff 100%)" : "linear-gradient(to top,#d6d6d6 72%, #f7f7f7 100%)";
         String textColor = isSentByUser ? "white" : "black";
-        String borderRadius = isSentByUser ? "15 0 15 15" : "0 15 15 15";
+        String borderRadius = "15 15 15 15";
 
         messageLabel.setStyle(String.format(
                 "-fx-background-color: %s; -fx-text-fill: %s; -fx-background-radius: %s; -fx-margin: 50,0,50,0;",
-                backgroundColor, textColor, borderRadius
+                backgroundGradient,textColor, borderRadius
         ));
 
         double width = 250;

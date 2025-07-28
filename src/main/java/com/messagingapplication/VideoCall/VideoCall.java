@@ -46,6 +46,7 @@ public class VideoCall extends Thread {
         Platform.runLater(()-> {
             stage = new Stage();
         });
+        this.setDaemon(true);
 
     }
 

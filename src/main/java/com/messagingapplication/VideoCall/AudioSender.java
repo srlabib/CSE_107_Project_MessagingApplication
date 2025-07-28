@@ -19,6 +19,7 @@ public class AudioSender extends Thread {
         }
         this.receiverPort = recipientPort;
         this.receiverIP = ip;
+        this.setDaemon(true);
         System.out.println("Sending audio to: " + receiverIP.getHostAddress() + ":" + receiverPort);
     }
 
