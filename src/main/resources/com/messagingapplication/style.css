@@ -1,14 +1,14 @@
 /* Light modern Telegram/WhatsApp-inspired style */
 
 .contact-pane {
-    -fx-background-color: #16243e;
+    -fx-background-color: #121212;
     -fx-padding: 15;
     -fx-pref-width: 250;
 }
 
 .contact-list {
-    -fx-background-color: #16243e;
-    -fx-control-inner-background: #16243e;
+    -fx-background-color: #1e1e1e;
+    -fx-control-inner-background: #1e1e1e;
 }
 
 .contact-list .virtual-flow {
@@ -22,7 +22,7 @@
 }
 
 .chat-pane {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #1e1e1e;
     -fx-padding: 20;
 }
 
@@ -32,10 +32,14 @@
     -fx-text-fill: #2e3a59;
     -fx-padding: 0 0 10 0;
 }
-
 .message-scroll {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #1f1f1f;
+}
+
+.message-scroll .viewport{
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #1f1f1f;
 }
 
 .message-container {
@@ -172,4 +176,7 @@
     -fx-margin: 0 50 0 50;
 }
 
-
+.loginBox{
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+}
