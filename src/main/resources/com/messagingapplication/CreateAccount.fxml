@@ -6,62 +6,80 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to right, #e0f7fa, #ffffff);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.RegisterController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to right, #e0f7fa, #ffffff);" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.RegisterController">
 
     <children>
-        <!-- Sign Up Card -->
-        <VBox alignment="CENTER" layoutX="450.0" layoutY="70.0" prefHeight="360.0" prefWidth="300.0" spacing="18.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12, 0, 0, 4);">
-            <padding>
-                <Insets bottom="30" left="30" right="30" top="30" />
-            </padding>
-
-            <Label style="-fx-text-fill: #333;" text="Create Account">
-                <font>
-                    <Font name="Segoe UI Semibold" size="22" />
-                </font>
-            </Label>
-
-            <TextField fx:id="usernameField" prefHeight="40" promptText="Username" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d0d0d0;">
-                <font>
-                    <Font size="14" />
-                </font>
-            </TextField>
-
-            <PasswordField fx:id="passwordField" prefHeight="40" promptText="Password" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d0d0d0;">
-                <font>
-                    <Font size="14" />
-                </font>
-            </PasswordField>
-
-            <PasswordField fx:id="confirmPasswordField" prefHeight="40" promptText="Confirm Password" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d0d0d0;">
-                <font>
-                    <Font size="14" />
-                </font>
-            </PasswordField>
-
-            <Button onAction="#CreateAccount" prefHeight="40" prefWidth="160" style="-fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);                            -fx-background-radius: 20;                            -fx-text-fill: white;                            -fx-font-size: 14;" text="Create Account">
-            </Button>
-
-            <Hyperlink onAction="#moveToLogin" style="-fx-text-fill: #0072ff; -fx-font-size: 13;" text="← Back to Login">
-            </Hyperlink>
-        </VBox>
+      <ImageView fitHeight="501.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@png/login_design.png" />
+         </image>
+      </ImageView>
 
         <!-- Branding / Left Panel -->
-        <VBox alignment="CENTER" layoutX="80.0" layoutY="140.0" prefHeight="200.0" prefWidth="300.0" spacing="15.0">
-            <Label style="-fx-text-fill: #0072ff;" text="Quick Chat">
-                <font>
-                    <Font name="Segoe UI Bold" size="36" />
-                </font>
-            </Label>
+        <VBox alignment="CENTER" layoutX="118.0" layoutY="127.0" prefHeight="200.0" prefWidth="300.0" spacing="15.0">
+         <Label prefHeight="76.0" prefWidth="201.0" style="-fx-text-fill: #0072ff;" text="Quick Chat">
+            <font>
+               <Font name="Dubai Medium" size="43.0" />
+            </font>
+         </Label>
             <Label style="-fx-text-fill: #555;" text="Stay Connected Instantly">
                 <font>
                     <Font name="Segoe UI" size="16" />
                 </font>
             </Label>
         </VBox>
+      <VBox alignment="CENTER" layoutX="435.0" layoutY="60.0" prefHeight="320.0" prefWidth="300.0" spacing="20.0" styleClass="loginBox" stylesheets="@style.css">
+         <padding>
+            <Insets bottom="30" left="30" right="30" top="30" />
+         </padding>
+         <effect>
+            <DropShadow height="50.0" radius="24.5" width="50.0">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" opacity="0.6146788597106934" />
+               </color>
+            </DropShadow>
+         </effect>
+         <children>
+   
+               <Label style="-fx-text-fill: #333;" text="Create Account">
+                   <font>
+                       <Font name="Segoe UI Semibold" size="22" />
+                   </font>
+               </Label>
+   
+               <TextField fx:id="usernameField" prefHeight="40" promptText="Username" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d0d0d0;">
+                   <font>
+                       <Font size="14" />
+                   </font>
+               </TextField>
+   
+               <PasswordField fx:id="passwordField" prefHeight="40" promptText="Password" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d0d0d0;">
+                   <font>
+                       <Font size="14" />
+                   </font>
+               </PasswordField>
+   
+               <PasswordField fx:id="confirmPasswordField" prefHeight="40" promptText="Confirm Password" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d0d0d0;">
+                   <font>
+                       <Font size="14" />
+                   </font>
+               </PasswordField>
+            <Label alignment="CENTER" prefHeight="19.0" prefWidth="234.0" textAlignment="CENTER" />
+   
+               <Button onAction="#CreateAccount" prefHeight="40" prefWidth="160" style="-fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);                            -fx-background-radius: 20;                            -fx-text-fill: white;                            -fx-font-size: 14;" text="Create Account">
+            </Button>
+   
+               <Hyperlink onAction="#moveToLogin" style="-fx-text-fill: #0072ff; -fx-font-size: 13;" text="← Back to Login">
+            </Hyperlink>
+         </children>
+      </VBox>
     </children>
 </AnchorPane>
