@@ -10,13 +10,15 @@ public class Message implements Serializable {
     private final String threadID; // which chat thread the message belongs to
     private final String content; // content of the message
     private final LocalDateTime timestamp; // timestamp of when the message was sent
+    private final byte[] image;
 
-    public Message(String sender,String reciepent,String thradID, String content, LocalDateTime time) {
+    public Message(String sender,String reciepent,String thradID, String content, LocalDateTime time, byte[] image) {
         this.sender = sender;
         this.threadID = thradID;
         this.content = content;
         this.timestamp = time;
         this.reciepent = reciepent;
+        this.image = image;
     }
 
     public String getSender() {
@@ -37,5 +39,9 @@ public class Message implements Serializable {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public byte[] getImage() {
+        return image;
     }
 }

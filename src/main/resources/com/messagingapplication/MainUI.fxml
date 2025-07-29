@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainPane" prefWidth="543.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.MainUIController">
+<BorderPane fx:id="mainPane" prefHeight="575.0" prefWidth="543.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.MainUIController">
 
     <!-- Left: Contact List -->
     <left>
-        <VBox fx:id="contactPane" prefHeight="553.0" spacing="10" styleClass="contact-pane">
-         <HBox prefHeight="0.0" prefWidth="219.0" styleClass="search-box">
+        <VBox fx:id="contactPane" prefHeight="575.0" prefWidth="255.0" spacing="10" styleClass="contact-pane">
+         <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="219.0" styleClass="search-box">
             <children>
-               <TextField fx:id="searchText" onAction="#search" prefHeight="25.0" prefWidth="242.0" promptText="Search user" styleClass="user-search-field" />
-               <AnchorPane prefHeight="33.0" prefWidth="61.0">
-                  <children>
-                     <ImageView fitHeight="31.0" fitWidth="24.0" layoutX="5.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" styleClass="search-icon">
-                        <image>
-                           <Image url="@png/icon.png" />
-                        </image>
-                     </ImageView>
-                  </children>
-               </AnchorPane>
+               <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="search-icon">
+                  <image>
+                     <Image url="@png/icon.png" />
+                  </image>
+               </ImageView>
+               <TextField fx:id="searchText" onAction="#search" prefHeight="32.0" prefWidth="169.0" promptText="Search user" styleClass="user-search-field" />
             </children>
+            <VBox.margin>
+               <Insets bottom="10.0" top="10.0" />
+            </VBox.margin>
+            <effect>
+               <DropShadow offsetX="5.0" offsetY="5.0" />
+            </effect>
          </HBox>
-         <VBox styleClass="contact-list" VBox.vgrow="ALWAYS">
+         <VBox prefHeight="515.0" prefWidth="219.0" styleClass="contact-list" VBox.vgrow="ALWAYS">
             <children>
                <Label prefHeight="56.0" prefWidth="94.0" styleClass="section-title" text="People" textFill="WHITE">
                   <font>
@@ -42,6 +44,9 @@
                </Label>
                   <ListView fx:id="contactList" prefWidth="219.0" styleClass="contact-list" VBox.vgrow="ALWAYS" />
             </children>
+            <effect>
+               <DropShadow offsetX="5.0" offsetY="5.0" />
+            </effect>
          </VBox>
         </VBox>
     </left>
@@ -49,33 +54,57 @@
     <!-- Center: Chat Area -->
     <center>
         <VBox fx:id="chatPane" prefWidth="316.0" spacing="5" styleClass="chat-pane">
-         <HBox alignment="CENTER" maxHeight="63.0" minHeight="63.0" prefHeight="63.0" prefWidth="278.0">
+         <VBox prefWidth="278.0" styleClass="chat-pane2" VBox.vgrow="ALWAYS">
             <children>
-                  <!-- Contact Name -->
-                  <Label fx:id="chatHeader" prefHeight="40.0" prefWidth="165.0" styleClass="chat-header" text="Select a contact" />
-               <Pane prefHeight="21.0" prefWidth="53.0" styleClass="accept-reject-Hbox" HBox.hgrow="ALWAYS" />
-               <ImageView accessibleRole="BUTTON" fitHeight="32.0" fitWidth="40.0" onMouseClicked="#videoCall" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@png/videoCall.png" />
-                  </image>
-               </ImageView>
-            </children>
-         </HBox>
-         <VBox prefWidth="278.0" styleClass="chat-pan2" VBox.vgrow="ALWAYS">
-            <children>
+               <HBox alignment="CENTER" maxHeight="63.0" minHeight="63.0" prefHeight="63.0" prefWidth="223.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #2e333b;">
+                  <children>
+                        <!-- Contact Name -->
+                        <Label fx:id="chatHeader" prefHeight="40.0" prefWidth="165.0" styleClass="chat-header" text="Select a contact" />
+                     <Pane prefHeight="21.0" prefWidth="53.0" styleClass="accept-reject-Hbox" HBox.hgrow="ALWAYS" />
+                     <ImageView accessibleRole="BUTTON" fitHeight="32.0" fitWidth="26.0" onMouseClicked="#videoCall" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@png/videoCall.png" />
+                        </image>
+                     </ImageView>
+                  </children>
+                  <VBox.margin>
+                     <Insets left="5.0" />
+                  </VBox.margin>
+                  <padding>
+                     <Insets right="10.0" />
+                  </padding>
+               </HBox>
       
-                                    <!-- Message View -->
-                  <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="452.0" prefWidth="293.0" styleClass="message-scroll" VBox.vgrow="ALWAYS">
+                                                   <!-- Message View -->
+                  <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="452.0" prefWidth="293.0" styleClass="message-scroll" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
 <!--                <VBox fx:id="messageContainer" spacing="10" styleClass="message-container"  />-->
             </ScrollPane>
       
-                              
+                                             
                                           <!-- Message Input -->
-                  <HBox alignment="CENTER_LEFT" spacing="10" styleClass="input-box">
-                      <TextField fx:id="messageInput" onAction="#send" promptText="Type a message..." styleClass="message-input" HBox.hgrow="ALWAYS" />
-                      <Button fx:id="sendButton" maxWidth="61.0" minWidth="56.0" onAction="#send" prefHeight="32.0" prefWidth="61.0" styleClass="send-button" text="Send" />
+                  <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-border-width: 1 0 0 0; -fx-border-color: #2e333b;" styleClass="input-box">
+                  <HBox alignment="CENTER" prefHeight="23.0" prefWidth="182.0" styleClass="message-box" HBox.hgrow="ALWAYS">
+                     <children>
+                            <TextField fx:id="messageInput" onAction="#send" prefWidth="187.0" promptText="Type a message..." styleClass="message-input" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                        </TextField>
+                        <ImageView fitHeight="23.0" fitWidth="26.0" onMouseClicked="#sendImage" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@png/ImageIcon.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
                   </HBox>
             </children>
+            <VBox.margin>
+               <Insets top="15.0" />
+            </VBox.margin>
+            <effect>
+               <DropShadow offsetX="5.0" offsetY="5.0" />
+            </effect>
          </VBox>
         </VBox>
     </center>

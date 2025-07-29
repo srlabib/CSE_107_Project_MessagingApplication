@@ -10,11 +10,15 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import org.opencv.videoio.VideoCapture;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 
 import java.io.ObjectOutputStream;
@@ -28,6 +32,8 @@ public class MainUIController {
     String currentChatThreadId;
     public Map<String, ChatThread> chatThreads;
     public boolean isVideoCallActive = false;
+    private byte[] selectedImage = null;
+    private final int maxImageSize = 1024 * 1024; // 1 MB
     @FXML
     public void initialize() {
         clientDataHandler = ClientDataHandler.getInstance();
@@ -64,7 +70,7 @@ public class MainUIController {
     public void send(ActionEvent event){
 
         String messageText = messageInput.getText();
-        if (messageText.isEmpty()) {
+        if (messageText.isEmpty() && selectedImage == null) {
             return; // Do not send empty messages
         }
         String reciepent = currentChatThreadId==null?ClientDataHandler.getInstance().searchResult:ClientDataHandler.getInstance().chatThread.get(currentChatThreadId).getRemoteUserName(clientDataHandler.getCurrentUsername());
@@ -74,7 +80,8 @@ public class MainUIController {
         }
         Runnable sendMessageTask = () -> {
             // Create a new message object
-            Message message = new Message(clientDataHandler.currentUser.getUsername(),reciepent,currentChatThreadId ,messageText,LocalDateTime.now());
+            Message message = new Message(clientDataHandler.currentUser.getUsername(),reciepent,currentChatThreadId ,messageText,LocalDateTime.now(), selectedImage);
+            selectedImage = null;
             System.out.println();
             try {
                 synchronized (oos) {
@@ -112,6 +119,32 @@ public class MainUIController {
         };
         new Thread(CallRequenstTask).start();
         System.out.println("Sending Call request: " +  "to" + remoteUser);
+    }
+
+
+    @FXML
+    public void sendImage(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if(selectedFile != null) {
+            if(selectedFile.length()> maxImageSize) {
+                System.err.println("Selected image is too large. Maximum size is " + (maxImageSize / (1024 * 1024)) + " MB.");
+                return;
+            }
+            try {
+                selectedImage = Files.readAllBytes(selectedFile.toPath());
+                send(null);
+            } catch (IOException e) {
+                System.err.println("Error sending image: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Image selection cancelled.");
+        }
     }
 
 

@@ -1,61 +1,83 @@
-/* Light modern Telegram/WhatsApp-inspired style */
+/*Main UI*/
 
 .contact-pane {
-    -fx-background-color: #060520;
-    -fx-padding: 15;
+    -fx-background-color: #1e1e1e;
+    -fx-padding: 15 20 20 15;
     -fx-pref-width: 250;
 }
 
 .contact-list {
-    -fx-background-color: #1e1e1e;
-    -fx-control-inner-background: #1e1e1e;
+    -fx-background-color: #000815;
+    -fx-control-inner-background: #000815;
     -fx-background-radius: 10;
 }
+
+.contact-list .scroll-bar:horizontal,
+.contact-list .scroll-bar:vertical {
+    -fx-opacity: 0;
+    -fx-padding: -10; /* Optional: removes clickable area */
+}
+
+.contact-list-inner {
+    -fx-background-color: #000815;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
 .contact-list .list-cell:selected {
-    -fx-background-color: #1a1a1a;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+    -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
 
 .contact-list .list-cell:focused {
-    -fx-background-color: #1a1a1a;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+    -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+
 }
 
 .contact-list:focused .list-cell:selected {
-    -fx-background-color: #1a1a1a;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+    -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
 
 .contact-list .list-cell:selected .contact-cell {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: #001630;
+    -fx-alignment: center-left;
+    -fx-border-radius: 10,10,10,10;
+    -fx-background-radius: 10,10,10,10;
+}
+.contact-cell:hover {
+    -fx-padding: 8;
+    -fx-background-color: #161f2e;
+    -fx-alignment: center-left;
+    -fx-border-radius: 10,10,10,10;
+    -fx-background-radius: 10,10,10,10;
 }
 
-.section-title {
-    -fx-font-size: 24px;
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-    -fx-padding: 0 0 0 16;
+
+.contact-cell {
+    -fx-padding: 8;
+    -fx-background-color: #000815;
+    -fx-border-color: #2e333b;
+    -fx-alignment: center-left;
+    -fx-border-radius: 10,10,10,10;
+    -fx-background-radius: 10,10,10,10;
+    -fx-border-width: 0 1 1 0;
 }
+
 
 .chat-pane {
-    -fx-background-color: #060520;
-    -fx-padding: 10 15 15 0;
-}
-.chat-pan2{
     -fx-background-color: #1e1e1e;
-    -fx-padding: 10 10 10 10;
+    -fx-padding: 10 20 20 0;
+}
+.chat-pane2{
+    -fx-background-color: #000815;
+    -fx-padding: 10 10 0 10;
     -fx-margin: 10 10 10 10;
     -fx-background-radius: 10;
 }
@@ -67,14 +89,21 @@
     -fx-padding: 0 0 10 0;
 }
 .message-scroll {
-    -fx-background-color: #1f1f1f;
-    -fx-border-color: #1f1f1f;
+    -fx-background-color: #000815;
 }
 
 .message-scroll .viewport{
-    -fx-background-color: #1f1f1f;
-    -fx-border-color: #1f1f1f;
+    -fx-background-color: #000815;
 }
+
+
+.section-title {
+    -fx-font-size: 24px;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 0 16;
+}
+
 
 .message-container {
     -fx-padding: 5;
@@ -87,7 +116,6 @@
     -fx-background-radius: 16;
     -fx-padding: 10;
     -fx-max-width: 100%;
-    /*-fx-wrap-text: true;*/
     -fx-font-size: 14px;
     -fx-text-fill: #303030;
 }
@@ -100,40 +128,29 @@
 }
 
 .input-box {
-    -fx-padding: 10 10 0 10;
+    -fx-padding: 15 5 15 5;
 }
 
 .message-input {
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-border-color: #ccc;
-    -fx-padding: 8;
+    -fx-background-color: #2e333b;
+    -fx-text-fill: white;
+}
+.message-box {
+    -fx-background-radius: 10;
+    -fx-background-color: #2e333b;
+    -fx-border-radius: 10;
+    -fx-padding: 5;
 }
 
 .send-button {
     -fx-background-color: #0088cc;
     -fx-text-fill: white;
-    -fx-background-radius: 20;
-    -fx-padding: 8 14;
+    -fx-background-radius: 10;
+    -fx-padding: 5 14;
 }
 
 
-.contact-cell {
-    -fx-padding: 8;
-    -fx-background-color: #1a1a1a;
-    -fx-alignment: center-left;
-    -fx-border-radius: 10,10,10,10;
-    -fx-background-radius: 10,10,10,10;
-}
 
-/*.contact-cell:hover {*/
-/*    -fx-padding: 8;*/
-/*    -fx-background-color: #2d3b91;*/
-/*    -fx-border-color: #2d3b91;*/
-/*    -fx-alignment: center-left;*/
-/*    -fx-border-radius: 10,10,10,10;*/
-/*    -fx-background-radius: 10,10,10,10;*/
-/*}*/
 
 .profile-image {
     -fx-background-radius: 100;
@@ -168,14 +185,10 @@
 }
 
 .user-search-field  {
-
-    -fx-background-radius: 20;
     -fx-padding: 5 10;
-    -fx-border-color: #CCC;
-    -fx-border-radius: 20;
     -fx-background-color: transparent;
     -fx-font-size: 14px;
-    -fx-text-fill: #333;
+    -fx-text-fill: white;
     -fx-prompt-text-fill: #999;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
@@ -183,7 +196,12 @@
 
 /* Text field styling */
 .search-box {
-    -fx-padding: 10 10;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #34414e;
+    -fx-background-color: #000815;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 0 0 0 10;
 }
 
 /*Video call section*/

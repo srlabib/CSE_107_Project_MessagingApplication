@@ -9,12 +9,19 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -187,9 +194,42 @@ public class ClientDataHandler {
         Label timeLabel = new Label(formattedDateTime);
         timeLabel.setFont(new Font("System", 10));
         timeLabel.setStyle("-fx-text-fill: #888888;");
-        if(addTime)messageWithTime.getChildren().addAll(timeLabel, messageLabel);
-        else messageWithTime.getChildren().add(messageLabel);
 
+        if(addTime)messageWithTime.getChildren().add(timeLabel);
+        if(message.getImage()!=null){
+            Image image = new Image(new ByteArrayInputStream(message.getImage()));
+            ImageView imageView = new ImageView(image);
+            imageView.setPreserveRatio(true);
+            imageView.setFitHeight(200);
+            imageView.setFitWidth(200);
+            messageWithTime.getChildren().add(imageView);
+            System.out.println("Image added to message: " + message.getImage().length);
+            imageView.setOnMouseClicked(event -> {
+                if(event.getClickCount() == 2){
+                    String home = System.getProperty("user.home");
+                    File saveDir = new File(home + "/Downloads/QuickChatImages");
+                    saveDir.mkdirs();
+                    DateTimeFormatter fileFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss-SSS");
+                    String filename = "Image_"+message.getTimestamp().format(fileFormatter) + detectImageType(message.getImage());
+                    File file = new File(saveDir, filename);
+                    try {
+                        Files.write(file.toPath(), message.getImage());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Desktop desktop = Desktop.getDesktop();
+                    if(file.exists()){
+                        try {
+                            desktop.open(file);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                }
+            });
+        }
+        if(!message.getContent().isEmpty())messageWithTime.getChildren().add(messageLabel);
 
         // Position the VBox inside the AnchorPane
         if (isSentByUser) {
@@ -206,6 +246,23 @@ public class ClientDataHandler {
         });
     }
 
+    public static String detectImageType(byte[] bytes) {
+        if (bytes.length >= 3 &&
+                (bytes[0] & 0xFF) == 0xFF &&
+                (bytes[1] & 0xFF) == 0xD8 &&
+                (bytes[2] & 0xFF) == 0xFF) {
+            return ".jpg";
+        }
+
+        if (bytes.length >= 6 &&
+                bytes[0] == 'G' &&
+                bytes[1] == 'I' &&
+                bytes[2] == 'F') {
+            return ".gif";
+        }
+
+        return ".png";
+    }
 
 
 
