@@ -1,6 +1,7 @@
 package com.AppServer;
 
 import com.SharedClasses.User;
+import com.messagingapplication.ClientDataHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -46,6 +47,24 @@ public class MainServer {
                         dataHandler.saveUsers();
                         dataHandler.saveChatThreads();
                         System.out.println("All data cleared.");
+                    }
+
+                    else if(command.equals("delete account")){
+                        ServerDataHandler dataHandler = ServerDataHandler.getInstance();
+                        System.out.println("Enter username:");
+                        String s = scanner.nextLine();
+                        User user = dataHandler.getUsers().get(s);
+                        if(user == null){
+                            System.err.println("Account not found");
+                            continue;
+                        }
+                        for(String chats:user.getChatThreads()){
+                            dataHandler.getCharThreads().remove(chats);
+                        }
+                        dataHandler.getUsers().remove(s);
+                        dataHandler.saveUsers();
+                        dataHandler.saveChatThreads();
+                        System.out.println("Account "+s+" is deleted");
                     }
 
                     else if(command.equals("show users")){

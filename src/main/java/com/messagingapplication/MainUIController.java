@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
@@ -37,6 +38,9 @@ public class MainUIController {
     @FXML
     public void initialize() {
         clientDataHandler = ClientDataHandler.getInstance();
+        File file = new File("src/main/resources/com/messagingapplication/DefaultProfilePicture/"+ClientDataHandler.getImageID(ClientDataHandler.getInstance().getCurrentUsername())+".png");
+        UserProfilePicture.setImage(new Image(file.toURI().toString()));
+        userName.setText(clientDataHandler.getCurrentUsername());
     }
 
 
@@ -46,6 +50,10 @@ public class MainUIController {
     @FXML protected ListView<ChatThread> contactList;
     @FXML private Label chatHeader;
     @FXML private TextField searchText;
+    @FXML private ImageView UserProfilePicture;
+    @FXML private ImageView reciepentProfilePicture;
+    @FXML private Label userName;
+    @FXML private Label statusLabel;
 
 
     @FXML
@@ -154,6 +162,18 @@ public class MainUIController {
             scrollPane.setContent(chatThreadView);
             scrollPane.setVvalue(1.0);
             chatHeader.setText(name);
+            statusLabel.getStyleClass().removeAll("online","offline");
+            if(clientDataHandler.isUserActive(name)){
+                statusLabel.setText("Active now");
+                statusLabel.getStyleClass().addAll( "online");
+            }
+            else{
+                statusLabel.setText("Offline");
+                statusLabel.getStyleClass().addAll("offline");
+            }
+            File file = new File("src/main/resources/com/messagingapplication/DefaultProfilePicture/"+ClientDataHandler.getImageID(name)+".png");
+            reciepentProfilePicture.setImage(new Image(file.toURI().toString()));
+
         } else {
             System.err.println("Chat thread view not found for ID: " + currentChatThreadId);
         }
@@ -251,4 +271,6 @@ public class MainUIController {
     public ScrollPane getScrollPane() {
         return scrollPane;
     }
+
+
 }

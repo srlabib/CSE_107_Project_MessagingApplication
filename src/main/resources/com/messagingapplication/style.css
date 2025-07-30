@@ -86,7 +86,7 @@
     -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
-    -fx-padding: 0 0 10 0;
+    -fx-padding: 5 0 2 0;
 }
 .message-scroll {
     -fx-background-color: #000815;

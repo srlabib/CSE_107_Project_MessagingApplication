@@ -81,6 +81,7 @@ public class RegisterController {
 
 
         User currentUser = (User) ois.readObject();
+        ClientDataHandler.getInstance().setCurrentUser(currentUser);
         Map<String, ChatThread> chatThreads = (ConcurrentHashMap<String, ChatThread>) ois.readObject();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MainUI.fxml"));
@@ -91,12 +92,14 @@ public class RegisterController {
         mainUIController.chatThreads = chatThreads;
 
         // Updating required data in ClientDataHandler from the server
-        ClientDataHandler.getInstance().setCurrentUser(currentUser);
         ClientDataHandler.getInstance().scrollPane = mainUIController.getScrollPane();
         ClientDataHandler.getInstance().uiController = mainUIController;
         ClientDataHandler.getInstance().loadData(chatThreads);
         mainUIController.loadUIData(); // Initialize UI with chat threads
         mainUIController.clientDataHandler = ClientDataHandler.getInstance();
+
+        Instances.clientDataHandler = ClientDataHandler.getInstance();
+        Instances.mainUIController = mainUIController;
 
 
 
@@ -105,6 +108,7 @@ public class RegisterController {
         Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
         stage.setTitle("Messaging Application - " + currentUser.getUsername());
         stage.setScene(new Scene(root));
+        stage.setResizable(true);
         stage.show();
 
 

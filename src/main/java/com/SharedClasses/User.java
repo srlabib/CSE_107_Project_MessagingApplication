@@ -38,10 +38,6 @@ public class User implements Serializable {
         chatThreads.add(chatThreadId);
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
 
     public String getName(){
         return  name;

@@ -59,6 +59,7 @@ public class LoginController {
                 return;
             }
         } catch (IOException ex) {
+            errorMessage.setText("Server is not available.");
             throw new RuntimeException(ex);
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);
@@ -70,6 +71,7 @@ public class LoginController {
         // the main UI will load its Vbox with the data from the clientDataHandler
 
         User currentUser = (User) ois.readObject();
+        ClientDataHandler.getInstance().setCurrentUser(currentUser);
         Map<String, ChatThread> chatThreads = (ConcurrentHashMap<String, ChatThread>) ois.readObject();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MainUI.fxml"));
@@ -80,7 +82,6 @@ public class LoginController {
         mainUIController.chatThreads = chatThreads;
 
         // Updating required data in ClientDataHandler from the server
-        ClientDataHandler.getInstance().setCurrentUser(currentUser);
         ClientDataHandler.getInstance().scrollPane = mainUIController.getScrollPane();
         ClientDataHandler.getInstance().uiController = mainUIController;
         ClientDataHandler.getInstance().loadData(chatThreads);

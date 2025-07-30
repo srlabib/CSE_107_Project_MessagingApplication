@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainPane" prefHeight="575.0" prefWidth="543.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.MainUIController">
+<BorderPane fx:id="mainPane" prefHeight="575.0" prefWidth="606.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.MainUIController">
 
     <!-- Left: Contact List -->
     <left>
@@ -37,7 +37,7 @@
          </HBox>
          <VBox prefHeight="515.0" prefWidth="219.0" styleClass="contact-list" VBox.vgrow="ALWAYS">
             <children>
-               <Label prefHeight="56.0" prefWidth="94.0" styleClass="section-title" text="People" textFill="WHITE">
+               <Label prefHeight="35.0" prefWidth="151.0" styleClass="section-title" text="People" textFill="WHITE">
                   <font>
                      <Font size="21.0" />
                   </font>
@@ -47,19 +47,51 @@
             <effect>
                <DropShadow offsetX="5.0" offsetY="5.0" />
             </effect>
+            <padding>
+               <Insets top="5.0" />
+            </padding>
          </VBox>
+         <HBox prefHeight="171.0" prefWidth="215.0" styleClass="chat-pane2">
+            <effect>
+               <DropShadow offsetX="5.0" offsetY="5.0" />
+            </effect>
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+            <children>
+               <ImageView fx:id="UserProfilePicture" fitHeight="43.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                  <HBox.margin>
+                     <Insets right="10.0" />
+                  </HBox.margin></ImageView>
+               <Label fx:id="userName" prefHeight="40.0" prefWidth="165.0" styleClass="chat-header" text="Name">
+                  <font>
+                     <Font name="Arial Narrow" size="12.0" />
+                  </font>
+               </Label>
+            </children>
+         </HBox>
         </VBox>
     </left>
 
     <!-- Center: Chat Area -->
     <center>
-        <VBox fx:id="chatPane" prefWidth="316.0" spacing="5" styleClass="chat-pane">
+        <VBox fx:id="chatPane" prefHeight="575.0" prefWidth="381.0" spacing="5" styleClass="chat-pane">
          <VBox prefWidth="278.0" styleClass="chat-pane2" VBox.vgrow="ALWAYS">
             <children>
                <HBox alignment="CENTER" maxHeight="63.0" minHeight="63.0" prefHeight="63.0" prefWidth="223.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #2e333b;">
                   <children>
-                        <!-- Contact Name -->
-                        <Label fx:id="chatHeader" prefHeight="40.0" prefWidth="165.0" styleClass="chat-header" text="Select a contact" />
+                     <ImageView fx:id="reciepentProfilePicture" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                        <HBox.margin>
+                           <Insets right="10.0" />
+                        </HBox.margin>
+                     </ImageView>
+                     <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                        <children>
+                              <!-- Contact Name -->
+                              <Label fx:id="chatHeader" prefHeight="0.0" prefWidth="104.0" styleClass="chat-header" text="Select a contact" />
+                           <Label fx:id="statusLabel" prefHeight="17.0" prefWidth="107.0" styleClass="status-label" text="Active Now" />
+                        </children>
+                     </VBox>
                      <Pane prefHeight="21.0" prefWidth="53.0" styleClass="accept-reject-Hbox" HBox.hgrow="ALWAYS" />
                      <ImageView accessibleRole="BUTTON" fitHeight="32.0" fitWidth="26.0" onMouseClicked="#videoCall" pickOnBounds="true" preserveRatio="true">
                         <image>

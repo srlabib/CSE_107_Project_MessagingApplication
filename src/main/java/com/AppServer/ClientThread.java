@@ -1,9 +1,11 @@
 package com.AppServer;
 
 import com.SharedClasses.*;
+import com.messagingapplication.ClientDataHandler;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -91,14 +93,17 @@ public class ClientThread implements Runnable{
 
         Thread senderThread = new Thread(new MessageSender());
         Thread receiverThread = new Thread(new MessageReceiver());
+        Thread activeUserListThread = new Thread(new SendActiveUserList());
 
 
         senderThread.start();
         receiverThread.start();
+        activeUserListThread.start();
 
         try {
             senderThread.join();
             receiverThread.join();
+            activeUserListThread.join();
 
         } catch (InterruptedException e) {
             System.err.println("Thread interrupted: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
@@ -112,9 +117,6 @@ public class ClientThread implements Runnable{
         } catch (IOException e) {
             System.err.println("Error closing resources: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
         }
-
-        System.err.println("User : "+user.getUsername()+" has disconnected");
-        ServerDataHandler.getInstance().removeActiveUser(user.getUsername());
 
 
     }
@@ -203,6 +205,30 @@ public class ClientThread implements Runnable{
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println(user.getUsername()+" disconnected. Message reciver exiting");
+                ServerDataHandler.getInstance().removeActiveUser(user.getUsername());
+            }
+        }
+    }
+
+    class SendActiveUserList implements Runnable {
+        @Override
+        public void run() {
+            // Logic for sending the list of active users to the client
+            try {
+                while (true) {
+                    if(oos == null || socket.isClosed()) {
+                        break;
+                    }
+                    Thread.sleep(3000); // Send every 5 seconds
+                    ArrayList<String> activeUsernames = ServerDataHandler.getInstance().getActiveUsers();
+
+                    oos.writeObject(activeUsernames);
+                    oos.flush();
+                }
+            } catch (IOException e) {
+                System.err.println("Error sending active user list: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+            } catch (InterruptedException e) {
+                System.err.println("SendActiveUserList thread interrupted: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             }
         }
     }

@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,6 +43,7 @@ public class ClientDataHandler {
     final public Object searchLock = new Object();
     public ObservableList<ChatThread> observableArrayList;
     public MainUIController uiController;
+    private ArrayList<String>activeUsers;
 
 
 
@@ -264,7 +266,28 @@ public class ClientDataHandler {
         return ".png";
     }
 
+    public synchronized void updateActiveUsers(ArrayList<String> activeUsers) {
+        this.activeUsers = activeUsers;
+//        // Update the UI or perform any necessary actions with the updated active users list
+//        Platform.runLater(() -> {
+//            if (uiController != null) {
+//                uiController.updateActiveUsers(activeUsers);
+//            }
+//        });
+    }
+
+    public synchronized boolean isUserActive(String username) {
+        return activeUsers != null && activeUsers.contains(username);
+    }
 
 
+    public static int getImageID(String username){
+        final int mod = 9;
+        int code = 0;
+        for (char c : username.toCharArray()) {
+            code = (code * 67 + c) % mod;
+        }
+        return code+1;
+    }
 
 }

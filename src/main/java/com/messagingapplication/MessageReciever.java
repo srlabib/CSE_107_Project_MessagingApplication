@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 public class MessageReciever extends Thread{
@@ -78,7 +79,10 @@ public class MessageReciever extends Thread{
                     }
                 }
 
-
+                else if(obj instanceof ArrayList<?>){
+                    // This is the chat thread view that is sent by the server
+                    ClientDataHandler.getInstance().updateActiveUsers((ArrayList<String>)obj);
+                }
                 else {
                     System.err.println("Received unknown object: " + obj.getClass().getName());
                 }

@@ -7,8 +7,11 @@ import javafx.animation.ScaleTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
+
+import java.io.File;
 
 public class ChatListCell extends ListCell<ChatThread> {
     public ChatListCell(){
@@ -31,8 +34,10 @@ public class ChatListCell extends ListCell<ChatThread> {
                 String lastMsg = item.getMessageList().isEmpty() ? "" :
                         item.getMessageList().get(item.getMessageList().size() - 1).getContent();
 
+                File file = new File("src/main/resources/com/messagingapplication/DefaultProfilePicture/"+ClientDataHandler.getImageID(remoteName)+".png");
                 controller.setName(remoteName);
                 controller.setLastMessage(lastMsg);
+                controller.setProfileImage(new Image(file.toURI().toString()));
                 HBox.setMargin(root,new Insets(5,0,5,0)); // Set margin for the root HBox
                 setGraphic(root);
                 setText(null);

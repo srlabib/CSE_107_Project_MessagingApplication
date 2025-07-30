@@ -8,6 +8,7 @@ import com.SharedClasses.User;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -179,5 +180,9 @@ public class ServerDataHandler {
             }
         }
 
+
+    }
+    public ArrayList<String> getActiveUsers(){
+        return new ArrayList<String>(activeUsers.keySet());
     }
 }
