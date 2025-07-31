@@ -23,46 +23,45 @@
     -fx-background-radius: 10;
     -fx-border-radius: 10;
 }
-.contact-list .list-cell:selected {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
+/*.contact-list .list-cell:selected {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-insets: 0;*/
+/*    -fx-focus-color: transparent;*/
+/*    -fx-faint-focus-color: transparent;*/
+/*}*/
 
-.contact-list .list-cell:focused {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
+/*.contact-list .list-cell:focused {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-insets: 0;*/
+/*    -fx-focus-color: transparent;*/
+/*    -fx-faint-focus-color: transparent;*/
 
-}
+/*}*/
 
-.contact-list:focused .list-cell:selected {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
+/*.contact-list:focused .list-cell:selected {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-insets: 0;*/
+/*    -fx-focus-color: transparent;*/
+/*    -fx-faint-focus-color: transparent;*/
+/*}*/
 
-.contact-list .list-cell:selected .contact-cell {
-    -fx-background-color: #001630;
-    -fx-alignment: center-left;
-    -fx-border-radius: 10,10,10,10;
-    -fx-background-radius: 10,10,10,10;
-}
-.contact-cell:hover {
-    -fx-padding: 8;
-    -fx-background-color: #161f2e;
-    -fx-alignment: center-left;
-    -fx-border-radius: 10,10,10,10;
-    -fx-background-radius: 10,10,10,10;
-}
+/*.contact-list .list-cell:selected .contact-cell {*/
+/*    -fx-background-color: #001630;*/
+/*    -fx-alignment: center-left;*/
+/*    -fx-border-radius: 10,10,10,10;*/
+/*    -fx-background-radius: 10,10,10,10;*/
+/*}*/
+/*.contact-cell:hover {*/
+/*    -fx-padding: 8;*/
+/*    -fx-background-color: #161f2e;*/
+/*    -fx-alignment: center-left;*/
+/*    -fx-border-radius: 10,10,10,10;*/
+/*    -fx-background-radius: 10,10,10,10;*/
+/*}*/
 
 
 .contact-cell {
-    -fx-padding: 8;
-    -fx-background-color: #000815;
+    -fx-padding: 8 8 8 0;
     -fx-border-color: #2e333b;
     -fx-alignment: center-left;
     -fx-border-radius: 10,10,10,10;
@@ -70,7 +69,28 @@
     -fx-border-width: 0 1 1 0;
 }
 
+    .contact-list .list-cell:selected {
+        -fx-background-color: transparent;
+        -fx-background-insets: 0;
+        -fx-focus-color: transparent;
+        -fx-faint-focus-color: transparent;
+    }
 
+    .contact-list .list-cell:selected .contact-cell {
+        -fx-background-color: #001630;
+        -fx-border-color: #2e333b;
+        -fx-alignment: center-left;
+        -fx-border-radius: 10;
+        -fx-background-radius: 10;
+    }
+
+    .contact-cell:hover {
+        -fx-background-color: #161f2e;
+        -fx-border-color: #2e333b;
+        -fx-alignment: center-left;
+        -fx-border-radius: 10;
+        -fx-background-radius: 10;
+    }
 .chat-pane {
     -fx-background-color: #1e1e1e;
     -fx-padding: 10 20 20 0;

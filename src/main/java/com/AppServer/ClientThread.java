@@ -41,7 +41,16 @@ public class ClientThread implements Runnable{
             System.out.println("User: " + data.username + " is trying to login");
             if(data.newAccount){
                 user = dataHandler.createUser(data.username, data.password, data.name);
-                System.out.println("New user created: " + user.getUsername());
+                try {
+                    System.out.println("New user created: " + user.getUsername());
+                }
+                catch (IllegalArgumentException e) {
+                    oos.writeObject(e.getMessage());
+                    System.err.println("Error creating new user: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+                    return; // Exit if user creation fails
+                }
+                oos.writeObject((String)"successful");
+                return;
             }
             else{
                 user = dataHandler.seachUser(data.username);

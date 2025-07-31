@@ -82,6 +82,23 @@ public class MessageReciever extends Thread{
                 else if(obj instanceof ArrayList<?>){
                     // This is the chat thread view that is sent by the server
                     ClientDataHandler.getInstance().updateActiveUsers((ArrayList<String>)obj);
+                    ArrayList<String> activeUsers = (ArrayList<String>)obj;
+                    if(Instances.mainUIController.contactList.getSelectionModel().getSelectedItem() == null){
+                        continue;
+                    }
+                    String remoteUser = Instances.mainUIController.contactList.getSelectionModel().getSelectedItem().getRemoteUserName(currentUser);
+                    if(remoteUser != null && activeUsers.contains(remoteUser)){
+                        // If the user is active, then we can set the active state
+                        Platform.runLater(()->{
+                            Instances.mainUIController.setActive();
+                        });
+                    }
+                    else{
+                        Platform.runLater(()->{
+                            Instances.mainUIController.setInactive();
+                        });
+                    }
+
                 }
                 else {
                     System.err.println("Received unknown object: " + obj.getClass().getName());

@@ -81,6 +81,7 @@ public class MainUIController {
         if (messageText.isEmpty() && selectedImage == null) {
             return; // Do not send empty messages
         }
+        messageInput.clear();
         String reciepent = currentChatThreadId==null?ClientDataHandler.getInstance().searchResult:ClientDataHandler.getInstance().chatThread.get(currentChatThreadId).getRemoteUserName(clientDataHandler.getCurrentUsername());
         if(reciepent == null || reciepent.isEmpty()) {
             System.err.println("No recipient selected for the message.");
@@ -270,6 +271,18 @@ public class MainUIController {
 
     public ScrollPane getScrollPane() {
         return scrollPane;
+    }
+
+    public void  setActive(){
+        statusLabel.setText("Active now");
+        statusLabel.getStyleClass().removeAll("online","offline");
+        statusLabel.getStyleClass().addAll( "online");
+    }
+
+    public void setInactive(){
+        statusLabel.setText("Offline");
+        statusLabel.getStyleClass().removeAll("online","offline");
+        statusLabel.getStyleClass().addAll( "offline");
     }
 
 

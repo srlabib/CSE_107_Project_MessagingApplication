@@ -68,9 +68,10 @@ public class RegisterController {
             oos.flush();
             String response = (String) ois.readObject();
             if(response.equals("successful")){
-                System.out.println("Login successful");
+                System.out.println("New Account created successfully");
+                errorMessage2.setText("Account created successfully!");
             } else {
-                System.out.println("Login failed: " + response);
+                System.out.println("Account creation failed: " + response);
                 return;
             }
         } catch (IOException ex) {
@@ -78,39 +79,6 @@ public class RegisterController {
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
-
-
-        User currentUser = (User) ois.readObject();
-        ClientDataHandler.getInstance().setCurrentUser(currentUser);
-        Map<String, ChatThread> chatThreads = (ConcurrentHashMap<String, ChatThread>) ois.readObject();
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainUI.fxml"));
-        Parent root = loader.load();
-
-        MainUIController mainUIController = loader.getController();
-        mainUIController.oos = oos;
-        mainUIController.chatThreads = chatThreads;
-
-        // Updating required data in ClientDataHandler from the server
-        ClientDataHandler.getInstance().scrollPane = mainUIController.getScrollPane();
-        ClientDataHandler.getInstance().uiController = mainUIController;
-        ClientDataHandler.getInstance().loadData(chatThreads);
-        mainUIController.loadUIData(); // Initialize UI with chat threads
-        mainUIController.clientDataHandler = ClientDataHandler.getInstance();
-
-        Instances.clientDataHandler = ClientDataHandler.getInstance();
-        Instances.mainUIController = mainUIController;
-
-
-
-        new MessageReciever(ois,oos);
-
-        Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.setTitle("Messaging Application - " + currentUser.getUsername());
-        stage.setScene(new Scene(root));
-        stage.setResizable(true);
-        stage.show();
-
 
     }
 }
