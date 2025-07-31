@@ -34,13 +34,13 @@
             </font>
          </Label>
 
-         <TextField fx:id="usernameField" prefHeight="40.0" promptText="Username" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d0d0d0;" text="srlabib">
+         <TextField fx:id="usernameField" prefHeight="40.0" promptText="Username" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d0d0d0;">
             <font>
                <Font size="14" />
             </font>
          </TextField>
 
-         <PasswordField fx:id="passwordField" prefHeight="40.0" promptText="Password" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d0d0d0;" text="123">
+         <PasswordField fx:id="passwordField" prefHeight="40.0" promptText="Password" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d0d0d0;">
             <font>
                <Font size="14" />
             </font>
