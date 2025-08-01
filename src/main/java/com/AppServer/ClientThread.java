@@ -228,7 +228,7 @@ public class ClientThread implements Runnable{
                     if(oos == null || socket.isClosed()) {
                         break;
                     }
-                    Thread.sleep(3000); // Send every 5 seconds
+                    Thread.sleep(3000);
                     ArrayList<String> activeUsernames = ServerDataHandler.getInstance().getActiveUsers();
 
                     oos.writeObject(activeUsernames);

@@ -61,9 +61,6 @@ public class ServerDataHandler {
         return user;
     }
 
-//    ChatThread searchChatThread(String id) {
-//        return charThreads.get(id);
-//    }
 
     ChatThread createChatThread(String id, String name, String[] participants) {
         ChatThread chatThread = new ChatThread(id, participants);

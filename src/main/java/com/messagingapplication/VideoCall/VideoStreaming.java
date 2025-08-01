@@ -71,11 +71,11 @@ public class VideoStreaming extends Thread {
                         throw new RuntimeException(e);
                     }
                 }
-                try {
-                    Thread.sleep(33); // approx 30 FPS
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(33); // approx 30 FPS
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
             capture.release();
         } else {

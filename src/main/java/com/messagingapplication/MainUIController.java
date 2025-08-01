@@ -17,6 +17,7 @@ import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import org.opencv.videoio.VideoCapture;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -250,7 +251,8 @@ public class MainUIController {
 
                 // After receiving the result, update the UI
                 if(ClientDataHandler.getInstance().searchResult.equals("###")){
-                    System.out.println("User not found: " + username);
+//                    System.out.println();
+                    JOptionPane.showMessageDialog(null,"User not found: " + username);
                     ClientDataHandler.getInstance().searchResult = null;
                 } else {
                     System.out.println("User found: " + ClientDataHandler.getInstance().searchResult);
