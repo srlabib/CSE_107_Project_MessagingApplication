@@ -41,7 +41,6 @@ public class AudioReceiver extends Thread {
 
                 if (packet.getLength() > 0) {
                     int bytesWritten = speakers.write(packet.getData(), 0, packet.getLength());
-                    System.out.println("Audio packet: " + packet.getLength() + " bytes, wrote: " + bytesWritten);
 
                     packetCounter++;
                     if (packetCounter % 20 == 0) {

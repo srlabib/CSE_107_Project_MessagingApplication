@@ -205,7 +205,6 @@ public class ClientDataHandler {
             imageView.setFitHeight(200);
             imageView.setFitWidth(200);
             messageWithTime.getChildren().add(imageView);
-            System.out.println("Image added to message: " + message.getImage().length);
             imageView.setOnMouseClicked(event -> {
                 if(event.getClickCount() == 2){
                     String home = System.getProperty("user.home");

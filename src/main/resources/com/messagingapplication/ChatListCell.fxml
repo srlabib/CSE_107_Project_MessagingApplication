@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="content" alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="65.0" spacing="10" styleClass="contact-cell" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.ChatListCellController">
+<HBox fx:id="content" alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="65.0" spacing="10" styleClass="contact-cell" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21.0.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.ChatListCellController">
 
     <!-- Profile Picture -->
     <ImageView fx:id="profileImage" fitHeight="30.0" fitWidth="30.0" styleClass="profile-image" />

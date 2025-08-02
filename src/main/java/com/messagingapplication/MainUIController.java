@@ -15,7 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
-import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
 import java.io.File;

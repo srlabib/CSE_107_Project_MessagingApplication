@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainPane" prefHeight="575.0" prefWidth="606.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.MainUIController">
+<BorderPane fx:id="mainPane" prefHeight="575.0" prefWidth="606.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21.0.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.messagingapplication.MainUIController">
 
     <!-- Left: Contact List -->
     <left>

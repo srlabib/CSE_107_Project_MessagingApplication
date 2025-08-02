@@ -71,11 +71,7 @@ public class VideoStreaming extends Thread {
                         throw new RuntimeException(e);
                     }
                 }
-//                try {
-//                    Thread.sleep(33); // approx 30 FPS
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+
             }
             capture.release();
         } else {
@@ -99,7 +95,6 @@ public class VideoStreaming extends Thread {
     private BufferedImage matToBufferedImage(Mat original) {
         int width = original.width(), height = original.height(), channels = original.channels();
         byte[] sourcePixels = new byte[width * height * channels];
-//        System.out.println(width*height* channels);
         original.get(0, 0, sourcePixels);
 
         BufferedImage image;

@@ -1,7 +1,6 @@
 package com.AppServer;
 
 import com.SharedClasses.*;
-import com.messagingapplication.ClientDataHandler;
 
 import java.io.*;
 import java.net.Socket;
@@ -49,7 +48,7 @@ public class ClientThread implements Runnable{
                     System.err.println("Error creating new user: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
                     return; // Exit if user creation fails
                 }
-                oos.writeObject((String)"successful");
+                oos.writeObject("successful");
                 return;
             }
             else{
@@ -83,9 +82,9 @@ public class ClientThread implements Runnable{
         ServerDataHandler.getInstance().addActiveUser(user.getUsername(), this);
 
         try {
-            oos.writeObject((String)"successful");
+            oos.writeObject("successful");
             oos.writeObject(user);
-            Map<String, ChatThread> chatThreads = new ConcurrentHashMap<String, ChatThread>();
+            Map<String, ChatThread> chatThreads = new ConcurrentHashMap<>();
             HashSet<String> chatThreadIds = user.getChatThreads();
             for(String id : chatThreadIds){
                 chatThreads.put(id, dataHandler.getChatThread(id));
@@ -192,27 +191,31 @@ public class ClientThread implements Runnable{
             try {
                 while (true) {
                     Object obj = ois.readObject();
-                    if (obj instanceof Message message) {
-                        System.out.println("Message "+message.getContent()+"recieved from user: " + message.getSender()+" to "+message.getReciepent()+" at "+message.getTimestamp());
-                        ServerDataHandler.getInstance().addNewMessage(message,user.getUsername());
-                    } else if(obj instanceof String searchUsername){  // Assuming the object is a String for searching users
-                        System.out.println("Searching for user: " + searchUsername);
-                        if(ServerDataHandler.getInstance().seachUser(searchUsername) != null) {
-                            oos.writeObject(searchUsername);
-                        } else {
-                            oos.writeObject("###"); // Indicating that the user was not found
+                    switch (obj) {
+                        case Message message -> {
+                            System.out.println("Message " + message.getContent() + "recieved from user: " + message.getSender() + " to " + message.getReciepent() + " at " + message.getTimestamp());
+                            ServerDataHandler.getInstance().addNewMessage(message, user.getUsername());
                         }
-                    }
-                    else if(obj instanceof CallRequest callRequest){
-                        System.out.println("Call request received from " + callRequest.getSender() + " to " + callRequest.getRecipient());
-                        // Handle the call request, e.g., notify the receiver or log it
-                        ServerDataHandler.getInstance().handleCallRequest(callRequest);
-                    } else {
-                        System.err.println("Received unknown object: " + obj.getClass().getName());
+                        case String searchUsername -> {
+                            System.out.println("Searching for user: " + searchUsername);
+                            if (ServerDataHandler.getInstance().seachUser(searchUsername) != null) {
+                                oos.writeObject(searchUsername);
+                            } else {
+                                oos.writeObject("###"); // Indicating that the user was not found
+                            }
+                        }
+                        case CallRequest callRequest -> {
+                            System.out.println("Call request received from " + callRequest.getSender() + " to " + callRequest.getRecipient());
+                            // Handle the call request, e.g., notify the receiver or log it
+                            ServerDataHandler.getInstance().handleCallRequest(callRequest);
+                        }
+                        case null, default -> {
+                            assert obj != null;
+                            System.err.println("Received unknown object: " + obj.getClass().getName());
+                        }
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 System.out.println(user.getUsername()+" disconnected. Message reciver exiting");
                 ServerDataHandler.getInstance().removeActiveUser(user.getUsername());
             }
